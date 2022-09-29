@@ -53,7 +53,9 @@ dependencies:
   local_auth:
   simple_connection_checker: ^0.2.1
   firebase_analytics:
-
+  image_cropper: ^1.5.1 
+  image_picker: ^0.8.4+11 
+  cached_network_image:
   otp_text_field: 
 
   top_snackbar_flutter:

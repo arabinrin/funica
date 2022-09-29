@@ -6,8 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage with ChangeNotifier {
   GetStorage box = GetStorage();
-  static const _keyFName = 'fName';
-  static const _keyLName = 'lName';
+  static const _keyUser = 'username';
   static const _keyEmail = 'email';
   static const _keyPassword = 'pwd';
   static const _keyPhoneNum = 'pwd';
@@ -20,13 +19,10 @@ class Storage with ChangeNotifier {
 
    setData(String key, dynamic value) => box.write(key, value);
 
-  Future setProfileData(String fName, String lName, String email,
-      String password, String phone) async {
-    await box.write(_keyFName, fName);
-    await box.write(_keyLName, lName);
+  Future setProfileData(String username, String email, String password) async {
+    await box.write(_keyUser, username);
     await box.write(_keyEmail, email);
     await box.write(_keyPassword, password);
-    await box.write(_keyPhoneNum, phone);
   }
 
   Future setAdsNum(String num) async {
@@ -43,13 +39,11 @@ class Storage with ChangeNotifier {
     return box.read(_keyPhoneNum);
   }
 
-   String? getFName() {
-    return box.read(_keyFName);
+   String? getUsername() {
+    return box.read(_keyUser);
   }
 
-   String? getLName() {
-    return box.read(_keyLName);
-  }
+
 
    String? getEmail() {
     return box.read(_keyEmail);

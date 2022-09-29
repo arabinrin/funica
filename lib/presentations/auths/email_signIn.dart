@@ -25,8 +25,8 @@ class EmailSignIn extends StatefulWidget {
 class _EmailSignInState extends State<EmailSignIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  TextEditingController fullName = TextEditingController();
-  TextEditingController phone = TextEditingController();
+   TextEditingController username = TextEditingController();
+  // TextEditingController phone = TextEditingController();
 
   bool _loadingState = false;
   final authrepository = AuthRepository();
@@ -65,18 +65,18 @@ class _EmailSignInState extends State<EmailSignIn> {
                     children: [
                       CustomFormField(
                         validator: (value) {
-                          if (value!.contains(' ')) {
+                          if (value!.length >3) {
                             return null;
                           } else {
-                            return 'I mean your full namee';
+                            return 'I mean your username';
                           }
                         },
-                        controller: fullName,
+                        controller: username,
                         keyboardType: TextInputType.emailAddress,
                         inputAction: TextInputAction.done,
                         label: '',
                         icon: const Icon(Icons.person),
-                        hint: 'John Bosko',
+                        hint: 'Nickname',
                       ),
                       CustomFormField(
                         validator: (value) {
@@ -154,12 +154,15 @@ class _EmailSignInState extends State<EmailSignIn> {
                             });
                             await Future.value(
                                 authrepository.createWithEmailAndPwd(
+                                  username.text,
                                     emailController.text.trim(),
                                     passwordController.text,
                                     context,
-                                    fullName.text.trim().split(' ')[0],
-                                    fullName.text.trim().split(' ')[1],
-                                    phone.text));
+                                    // fullName.text.trim().split(' ')[0],
+                                    // fullName.text.trim().split(' ')[1],
+                                    // phone.text,
+                                    ),
+                                    );
                             setState(() {
                               _loadingState = false;
                             });

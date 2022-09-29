@@ -1,8 +1,16 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:funica/models/user_model.dart';
 import 'package:funica/presentations/registration/pin_screen.dart';
+import 'package:funica/presentations/registration/set_fingerprint.dart';
+import 'package:funica/repository/profile_repository.dart';
 import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/arrow.dart';
+import 'package:funica/utils/small_widgets/snackbar.dart';
 import 'package:funica/utils/small_widgets/svg.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:funica/widgets/button.dart';
@@ -11,6 +19,7 @@ import 'package:funica/widgets/selector.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl/intl.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({Key? key}) : super(key: key);
@@ -21,18 +30,24 @@ class ProfileForm extends StatefulWidget {
 
 class _ProfileFormState extends State<ProfileForm> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController fullName = TextEditingController();
-  TextEditingController nickName = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController userPhone = TextEditingController();
-  TextEditingController birthday = TextEditingController();
-  TextEditingController gender = TextEditingController();
+  ImageCropper imageCropper = ImageCropper();
+
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController nickNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController userPhoneController = TextEditingController();
+  TextEditingController birthdayController = TextEditingController();
+  TextEditingController genderControlller = TextEditingController();
   String initialCountry = 'NG';
   PhoneNumber number = PhoneNumber(isoCode: 'NG');
   String updateBirthDate = '';
   String phone = '';
   DateTime brithdayPick = DateTime.now();
   String dropdownvalue = 'Choose Gender';
+
+  final formrepository = ProfileRespository();
+
+  String? pic;
 
   @override
   Widget build(BuildContext context) {
@@ -62,52 +77,65 @@ class _ProfileFormState extends State<ProfileForm> {
             SizedBox(
               height: 20.h,
             ),
-            SizedBox(
-              height: 150.h,
-              width: 150.h,
-              child: Stack(
-                children: [
-                  Container(
-                    height: 150.h,
-                    width: 150.h,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: color.hoverColor,
-                    ),
-                    child: SvgImage(
-                        name: 'assets/svgs/profile.svg',
-                        height: 150.h,
-                        width: 150.w),
-                  ),
-                  Positioned(
-                      right: 10.w,
-                      bottom: 10,
-                      child: const Icon(Icons.camera_enhance)),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
-            ),
             Form(
                 key: _formKey,
                 child: Column(
                   children: [
+                    InkWell(
+                      onTap: () {
+                        formrepository.pickImage(context);
+                      },
+                      child: SizedBox(
+                        height: 150.h,
+                        width: 150.h,
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 150.h,
+                              width: 150.h,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: color.hoverColor,
+                              ),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: pic != null ? pic! : '',
+                                placeholder: (context, url) => SvgImage(
+                                    name: 'assets/svgs/profile.svg',
+                                    height: 150.h,
+                                    width: 150.w),
+                                errorWidget: (context, url, error) => SvgImage(
+                                    name: 'assets/svgs/profile.svg',
+                                    height: 150.h,
+                                    width: 150.w),
+                              ),
+                            ),
+                            Positioned(
+                                right: 10.w,
+                                bottom: 10,
+                                child: const Icon(Icons.camera_enhance)),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
                     CustomFormField(
-                        controller: fullName,
+                        controller: fullNameController,
                         keyboardType: TextInputType.name,
                         inputAction: TextInputAction.done,
                         label: '',
                         hint: 'full Name'),
                     CustomFormField(
-                        controller: nickName,
+                        controller: nickNameController,
                         keyboardType: TextInputType.name,
                         inputAction: TextInputAction.done,
                         label: '',
                         hint: 'Nickname'),
                     CustomFormField(
                         readOnly: true,
-                        controller: birthday,
+                        controller: birthdayController,
                         keyboardType: TextInputType.datetime,
                         inputAction: TextInputAction.done,
                         label: '',
@@ -144,7 +172,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             child: const Icon(Icons.calendar_month_rounded)),
                         hint: formattedBirthDate),
                     CustomFormField(
-                        controller: email,
+                        controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         inputAction: TextInputAction.done,
                         label: '',
@@ -172,7 +200,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       onInputChanged: (num) {
                         //  dialCode = num.dialCode.toString();
                       },
-                      textFieldController: userPhone,
+                      textFieldController: userPhoneController,
                       inputDecoration: InputDecoration(
                         hintText: 'Phone Number',
                         hintStyle: GoogleFonts.sourceSansPro(
@@ -202,7 +230,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       ),
                     ),
                     CustomFormField(
-                        controller: gender,
+                        controller: genderControlller,
                         keyboardType: TextInputType.name,
                         inputAction: TextInputAction.done,
                         label: '',
@@ -226,7 +254,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                           ])).then((value) {
                                 // print(value);
                                 setState(() {
-                                  gender.text = value ?? '';
+                                  genderControlller.text = value ?? '';
                                 });
                               });
                             },
@@ -236,8 +264,28 @@ class _ProfileFormState extends State<ProfileForm> {
                       height: 30.h,
                     ),
                     InkWell(
-                      onTap: (() =>
-                          changeScreen(context, const PinScreen())),
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          UserDetail userDetail = UserDetail(
+                            email: emailController.text,
+                            fName: fullNameController.text,
+                            nickname: nickNameController.text,
+                            birthday: formattedBirthDate,
+                            gender: genderControlller.text,
+                            phoneNum: userPhoneController.text,
+                            imgUrl: pic,
+                          );
+                          print(userDetail);
+                          formrepository.editUserInfo(userDetail);
+                          cToast(msg: "Profile Updated", context: context);
+
+                          changeScreenReplacement(context, const Finngerprint());
+                        } else {
+                          cToast(msg: 'Error', context: context);
+                        }
+                      },
+
+                      // (() => changeScreen(context, const PinScreen())),
                       child: Button(
                           title: 'Continue',
                           color: color.primaryColor,

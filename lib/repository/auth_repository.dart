@@ -16,12 +16,12 @@ class AuthRepository {
   UserModel? userModel;
   //Sign Up
   Future<void> createWithEmailAndPwd(
+    String username,
     String userSignUpEmail,
     String userSignUpPassword,
     BuildContext context,
-    String fName,
-    String lName,
-    String phoneNumber,
+    // String lName,
+    // String phoneNumber,
   ) async {
     bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
     final Storage storage = Provider.of<Storage>(context, listen: false);
@@ -32,22 +32,10 @@ class AuthRepository {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: userSignUpEmail, password: userSignUpPassword);
-        await userCredential.user!.sendEmailVerification();
-        await FirebaseFirestore.instance
-            .collection("UserData")
-            .doc(userCredential.user!.uid)
-            .set({
-          "userId": userCredential.user!.uid,
-          "fName": fName,
-          "lName": lName,
-          "email": userSignUpEmail,
-          "password": userSignUpPassword,
-          "registrationTime": DateTime.now(),
-          "phoneNumber": phoneNumber
-        }).then((value) async {
+        await userCredential.user!.sendEmailVerification().then((value) async {
           await storage.setIsUserLoggedIn(true);
-          await storage.setProfileData(fName, lName, userSignUpEmail,
-              userSignUpPassword, phoneNumber);
+          await storage.setProfileData(
+              userSignUpEmail, userSignUpPassword, username);
 
           changeScreenPushUntil(context, ProfileForm());
           cToast(msg: "Yay! Signed up Successfully 🤩", context: context);
@@ -91,22 +79,16 @@ class AuthRepository {
             if (FirebaseAuth.instance.currentUser!.uid ==
                 element.get("userId")) {
               userModel = UserModel(
-                fName: element.get("fName") ?? "",
+                username: element.get("fName") ?? "",
                 email: element.get("email") ?? "",
-                lName: element.get("lName") ?? "",
                 password: element.get("password") ?? "",
-                age: element.get("age") ?? "",
-                phoneNum: element.get("phoneNumber") ?? "",
-                location: element.get("location") ?? "",
               );
 
               storage.setProfileData(
-                  userModel!.fName,
-                  userModel!.lName,
-                  userModel!.email,
-                  userModel!.password,
-                  userModel!.location,
-                );
+                userModel!.username,
+                userModel!.email,
+                userModel!.password,
+              );
             }
           }).toList();
           changeScreenPushUntil(context, ProfileForm());

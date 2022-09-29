@@ -13,9 +13,9 @@ cToast({required String msg, required BuildContext context}) {
     displayDuration: const Duration(milliseconds: 3000),
     CustomSnackBar.success(
       iconPositionLeft: 8,
-      textStyle: bodySmallText(context).copyWith(color: color.primaryColor),
+      textStyle: bodySmallText(context).copyWith(color: color.backgroundColor),
       message: msg,
-      backgroundColor: color.hintColor,
+      backgroundColor: color.primaryColor,
       icon: Icon(Icons.info_rounded, color: color.primaryColor),
     ),
   );
