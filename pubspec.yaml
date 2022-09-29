@@ -42,15 +42,21 @@ dependencies:
   google_fonts: ^2.2.0
   loading_indicator: ^3.1.0
   flutter_svg: ^1.1.5
- 
+  cloud_firestore:
+  firebase_core: 
+  firebase_auth:
+  firebase_storage: ^10.2.9 
   get_storage: 
   intl_phone_number_input:  ^0.7.0+1
   permission_handler: ^9.0.2
   intl:
   local_auth:
+  simple_connection_checker: ^0.2.1
+  firebase_analytics:
 
   otp_text_field: 
 
+  top_snackbar_flutter:
 
 dev_dependencies:
   flutter_test:

@@ -1,15 +1,25 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:funica/presentations/home/home_page.dart';
 import 'package:funica/presentations/intro/welcome.dart';
 import 'package:funica/presentations/intro/splash_screen.dart';
 import 'package:funica/provider/theme_provider.dart';
+import 'package:funica/repository/auth_repository.dart';
+import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/text_resourses/themes_util.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  await GetStorage.init();
+  await Firebase.initializeApp();
+
   runApp(
     MultiProvider(providers: [
+      ChangeNotifierProvider.value(value: Storage()),
       ChangeNotifierProvider.value(value: DarkThemeProvider()),
     ], child: const MyApp()),
   );
@@ -31,11 +41,20 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  bool period() {
+    var hour = DateTime.now().hour;
+    if (hour < 20 && hour > 6) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void getCurrentAppTheme() async {
-        await themeChangeProvider.darkThemePreference.setDarkTheme(true);
+    await themeChangeProvider.darkThemePreference.setDarkTheme(period());
 
     themeChangeProvider.darkTheme =
-    await themeChangeProvider.darkThemePreference.getTheme();
+        await themeChangeProvider.darkThemePreference.getTheme();
   }
 
   @override
@@ -95,7 +114,22 @@ class AnimatedSplash extends StatelessWidget {
     return AnimatedSplashScreen(
       splashIconSize: MediaQuery.of(context).size.height,
       splash: const Splash(),
-      nextScreen:const  Welcome(),
+      nextScreen: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            print(snapshot.data);
+            if (snapshot.hasData) {
+              // if (UserPreferences.isUserLoggedIn() == true) {
+              return const HomePage();
+              // } else {
+              // return const SplashScreen(
+              // nextScreen: PasswordSignIn(),
+              // );
+              // }
+            } else {
+              return const Welcome();
+            }
+          }),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.scale,
       duration: 2000,

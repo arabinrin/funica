@@ -27,3 +27,18 @@ void changeScreenReplacement(BuildContext context, Widget widget) {
     ),
   );
 }
+
+void changeScreenPushUntil(BuildContext context, Widget widget) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 200),
+      reverseTransitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
+        opacity: animation,
+        child: widget,
+      ),
+    ),
+    (route) => false,
+  );
+}
