@@ -13,6 +13,7 @@ import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:funica/widgets/button.dart';
 import 'package:funica/widgets/custom_textfield.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 class EmailSignIn extends StatefulWidget {
@@ -25,7 +26,7 @@ class EmailSignIn extends StatefulWidget {
 class _EmailSignInState extends State<EmailSignIn> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-   TextEditingController username = TextEditingController();
+  TextEditingController username = TextEditingController();
   // TextEditingController phone = TextEditingController();
 
   bool _loadingState = false;
@@ -65,7 +66,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                     children: [
                       CustomFormField(
                         validator: (value) {
-                          if (value!.length >3) {
+                          if (value!.length > 3) {
                             return null;
                           } else {
                             return 'I mean your username';
@@ -146,33 +147,48 @@ class _EmailSignInState extends State<EmailSignIn> {
                         ],
                       ),
                       SizedBox(height: 20.h),
-                      InkWell(
-                        onTap: () async {
-                          if (_formKey.currentState!.validate()) {
-                            setState(() {
-                              _loadingState = true;
-                            });
-                            await Future.value(
+                      if (!_loadingState)
+                        InkWell(
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _loadingState = true;
+                              });
+                              await Future.value(
                                 authrepository.createWithEmailAndPwd(
                                   username.text,
-                                    emailController.text.trim(),
-                                    passwordController.text,
-                                    context,
-                                    // fullName.text.trim().split(' ')[0],
-                                    // fullName.text.trim().split(' ')[1],
-                                    // phone.text,
-                                    ),
-                                    );
-                            setState(() {
-                              _loadingState = false;
-                            });
-                          }
-                        },
-                        child: Button(
-                            title: 'Sign up',
-                            color: color.primaryColor,
-                            textcolor: color.backgroundColor),
-                      ),
+                                  emailController.text.trim(),
+                                  passwordController.text,
+                                  context,
+                                  // fullName.text.trim().split(' ')[0],
+                                  // fullName.text.trim().split(' ')[1],
+                                  // phone.text,
+                                ),
+                              );
+                              setState(() {
+                                _loadingState = false;
+                              });
+                            }
+                          },
+                          child: Button(
+                              title: 'Sign up',
+                              color: color.primaryColor,
+                              textcolor: color.backgroundColor),
+                        ),
+                      if (_loadingState)
+                        SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: LoadingIndicator(
+                              indicatorType: Indicator.ballSpinFadeLoader,
+                              colors: [
+                                color.primaryColor,
+                                Colors.grey,
+                                color.primaryColor.withOpacity(.5),
+                              ],
+                              strokeWidth: 4,
+                              pathBackgroundColor: color.primaryColor),
+                        )
                     ],
                   ),
                 ),
@@ -202,7 +218,7 @@ class _EmailSignInState extends State<EmailSignIn> {
                         style: GoogleFonts.poppins(
                             textStyle: bodySmallBoldText(context)),
                       ),
-                    )
+                    ),
                   ],
                 )
               ]),

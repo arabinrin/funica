@@ -23,6 +23,7 @@ class AuthRepository {
     // String lName,
     // String phoneNumber,
   ) async {
+
     bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
     final Storage storage = Provider.of<Storage>(context, listen: false);
     final color = Theme.of(context);
@@ -32,12 +33,13 @@ class AuthRepository {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: userSignUpEmail, password: userSignUpPassword);
+        userCredential.user!.updateDisplayName(username);
         await userCredential.user!.sendEmailVerification().then((value) async {
           await storage.setIsUserLoggedIn(true);
           await storage.setProfileData(
               userSignUpEmail, userSignUpPassword, username);
 
-          changeScreenPushUntil(context, ProfileForm());
+          changeScreenPushUntil(context, const ProfileForm());
           cToast(msg: "Yay! Signed up Successfully 🤩", context: context);
           FirebaseAnalytics.instance
               .logEvent(name: 'User just signed up', parameters: {
@@ -56,8 +58,7 @@ class AuthRepository {
         //   context: context);
       }
     } catch (e) {
-      print(e.toString());
-      cToast(msg: "Oops! An error occured.. 😞", context: context);
+      cToast(msg: "Oops! An error occured.. 😞 \n $e", context: context);
     }
   }
 

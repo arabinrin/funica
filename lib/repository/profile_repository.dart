@@ -10,9 +10,7 @@ import 'package:funica/utils/small_widgets/snackbar.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-
-class ProfileRespository{
+class ProfileRespository {
   void pickImage(BuildContext context) async {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -27,6 +25,7 @@ class ProfileRespository{
 
   Future<void> croppingImage(pickedImage) async {
     File? croppedFile = await ImageCropper().cropImage(
+      
       sourcePath: pickedImage.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
@@ -36,17 +35,19 @@ class ProfileRespository{
         CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: const AndroidUiSettings(
-          toolbarTitle: 'Cropper',
-          toolbarColor: Colors.red,
+          toolbarTitle: 'Crop to your taste',
+          toolbarColor: Colors.black,
+          statusBarColor: Colors.black,
           toolbarWidgetColor: Colors.white,
+          activeControlsWidgetColor: Colors.black87,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: false),
       iosUiSettings: const IOSUiSettings(
         minimumAspectRatio: 1.0,
       ),
     );
-
     await uploadToStorage(File(croppedFile!.path));
+
   }
 
 // upload to firebase storage
@@ -76,21 +77,18 @@ class ProfileRespository{
   }
 
   Future<void> editUserInfo(UserDetail userDetail) async {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .set({
-        "userId": FirebaseAuth.instance.currentUser!.uid,
-        "userName": userDetail.nickname,
-        "fullName": userDetail.fName,
-        "birthday": userDetail.birthday,
-        "email": userDetail.email,
-        "phone": userDetail.phoneNum,
-        "gender": userDetail.gender,
-        "profilePhoto": userDetail.imgUrl,
-
-      }, SetOptions(merge: true));
-    
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .set({
+      "userId": FirebaseAuth.instance.currentUser!.uid,
+      "userName": userDetail.nickname,
+      "fullName": userDetail.fName,
+      "birthday": userDetail.birthday,
+      "email": userDetail.email,
+      "phone": userDetail.phoneNum,
+      "gender": userDetail.gender,
+      "profilePhoto": userDetail.imgUrl,
+    }, SetOptions(merge: true));
   }
-
 }

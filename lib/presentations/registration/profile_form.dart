@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/models/user_model.dart';
-import 'package:funica/presentations/registration/pin_screen.dart';
 import 'package:funica/presentations/registration/set_fingerprint.dart';
+import 'package:funica/repository/database.dart';
 import 'package:funica/repository/profile_repository.dart';
 import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/arrow.dart';
@@ -20,6 +19,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl/intl.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class ProfileForm extends StatefulWidget {
   const ProfileForm({Key? key}) : super(key: key);
@@ -30,8 +30,7 @@ class ProfileForm extends StatefulWidget {
 
 class _ProfileFormState extends State<ProfileForm> {
   final _formKey = GlobalKey<FormState>();
-  ImageCropper imageCropper = ImageCropper();
-
+  DatabaseMethods databaseMethods = DatabaseMethods();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController nickNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -46,8 +45,40 @@ class _ProfileFormState extends State<ProfileForm> {
   String dropdownvalue = 'Choose Gender';
 
   final formrepository = ProfileRespository();
-
   String? pic;
+  String? email;
+  String? username;
+  bool loading = false;
+
+  @override
+  void initState() {
+    emailController.text = FirebaseAuth.instance.currentUser!.email!;
+    pic = FirebaseAuth.instance.currentUser!.photoURL;
+    nickNameController.text = FirebaseAuth.instance.currentUser!.displayName!;
+    userInfo();
+
+    super.initState();
+  }
+
+  userInfo() async {
+    await databaseMethods
+        .getUserdataById(FirebaseAuth.instance.currentUser!.uid)
+        .then((snapshot) {
+      if (snapshot != null) {
+        setState(() {
+          birthdayController.text = snapshot['birthday'];
+          genderControlller.text = snapshot['gender'];
+          userPhoneController.text = snapshot['phone'];
+          fullNameController.text = snapshot['fullName'];
+        });
+      } else {
+        setState(() {
+          final snackBar = SnackBar(content: Text('Error geting user profile'));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +113,9 @@ class _ProfileFormState extends State<ProfileForm> {
                 child: Column(
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         formrepository.pickImage(context);
+                        setState(() {});
                       },
                       child: SizedBox(
                         height: 150.h,
@@ -97,17 +129,20 @@ class _ProfileFormState extends State<ProfileForm> {
                                 shape: BoxShape.circle,
                                 color: color.hoverColor,
                               ),
-                              child: CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                imageUrl: pic != null ? pic! : '',
-                                placeholder: (context, url) => SvgImage(
-                                    name: 'assets/svgs/profile.svg',
-                                    height: 150.h,
-                                    width: 150.w),
-                                errorWidget: (context, url, error) => SvgImage(
-                                    name: 'assets/svgs/profile.svg',
-                                    height: 150.h,
-                                    width: 150.w),
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.cover,
+                                  imageUrl: pic != null ? pic! : '',
+                                  placeholder: (context, url) => SvgImage(
+                                      name: 'assets/svgs/profile.svg',
+                                      height: 150.h,
+                                      width: 150.w),
+                                  errorWidget: (context, url, error) =>
+                                      SvgImage(
+                                          name: 'assets/svgs/profile.svg',
+                                          height: 150.h,
+                                          width: 150.w),
+                                ),
                               ),
                             ),
                             Positioned(
@@ -122,6 +157,13 @@ class _ProfileFormState extends State<ProfileForm> {
                       height: 20.h,
                     ),
                     CustomFormField(
+                        validator: (value) {
+                          if (value!.contains(' ')) {
+                            return null;
+                          } else {
+                            return 'I has to be your full name';
+                          }
+                        },
                         controller: fullNameController,
                         keyboardType: TextInputType.name,
                         inputAction: TextInputAction.done,
@@ -263,34 +305,50 @@ class _ProfileFormState extends State<ProfileForm> {
                     SizedBox(
                       height: 30.h,
                     ),
-                    InkWell(
-                      onTap: () async {
-                        if (_formKey.currentState!.validate()) {
-                          UserDetail userDetail = UserDetail(
-                            email: emailController.text,
-                            fName: fullNameController.text,
-                            nickname: nickNameController.text,
-                            birthday: formattedBirthDate,
-                            gender: genderControlller.text,
-                            phoneNum: userPhoneController.text,
-                            imgUrl: pic,
-                          );
-                          print(userDetail);
-                          formrepository.editUserInfo(userDetail);
-                          cToast(msg: "Profile Updated", context: context);
+                    if (loading)
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: LoadingIndicator(
+                            indicatorType: Indicator.ballSpinFadeLoader,
+                            colors: [
+                              color.primaryColor,
+                              Colors.grey,
+                              color.primaryColor.withOpacity(.5),
+                            ],
+                            strokeWidth: 4,
+                            pathBackgroundColor: color.primaryColor),
+                      ),
+                    if (!loading)
+                      InkWell(
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            UserDetail userDetail = UserDetail(
+                              email: emailController.text,
+                              fName: fullNameController.text,
+                              nickname: nickNameController.text,
+                              birthday: formattedBirthDate,
+                              gender: genderControlller.text,
+                              phoneNum: userPhoneController.text,
+                              imgUrl: pic,
+                            );
+                            print(userDetail);
+                            formrepository.editUserInfo(userDetail);
+                            cToast(msg: "Profile Updated", context: context);
 
-                          changeScreenReplacement(context, const Finngerprint());
-                        } else {
-                          cToast(msg: 'Error', context: context);
-                        }
-                      },
+                            changeScreenReplacement(
+                                context, const Finngerprint());
+                          } else {
+                            cToast(msg: 'Error', context: context);
+                          }
+                        },
 
-                      // (() => changeScreen(context, const PinScreen())),
-                      child: Button(
-                          title: 'Continue',
-                          color: color.primaryColor,
-                          textcolor: color.backgroundColor),
-                    )
+                        // (() => changeScreen(context, const PinScreen())),
+                        child: Button(
+                            title: 'Continue',
+                            color: color.primaryColor,
+                            textcolor: color.backgroundColor),
+                      )
                   ],
                 ))
           ]),
