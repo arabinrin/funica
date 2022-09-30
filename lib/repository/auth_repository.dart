@@ -23,10 +23,8 @@ class AuthRepository {
     // String lName,
     // String phoneNumber,
   ) async {
-
     bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
-    final Storage storage = Provider.of<Storage>(context, listen: false);
-    final color = Theme.of(context);
+    final storage = Storage();
 
     try {
       if (isConnected == true) {
@@ -36,8 +34,7 @@ class AuthRepository {
         userCredential.user!.updateDisplayName(username);
         await userCredential.user!.sendEmailVerification().then((value) async {
           await storage.setIsUserLoggedIn(true);
-          await storage.setProfileData(
-              userSignUpEmail, userSignUpPassword, username);
+          await storage.setProfileData(userSignUpEmail, username);
 
           changeScreenPushUntil(context, const ProfileForm());
           cToast(msg: "Yay! Signed up Successfully 🤩", context: context);
@@ -66,8 +63,9 @@ class AuthRepository {
   Future<void> signInWithEmail(
       String email, String password, BuildContext context) async {
     bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
-    final Storage storage = Provider.of<Storage>(context, listen: false);
-    final color = Theme.of(context);
+    final storage = Storage();
+    
+
     try {
       if (isConnected == true) {
         UserCredential userCredential = await FirebaseAuth.instance
@@ -75,42 +73,25 @@ class AuthRepository {
             .then((value) async {
           await storage.setIsUserLoggedIn(true);
           QuerySnapshot userSnapShots =
-              await FirebaseFirestore.instance.collection("UserData").get();
+              await FirebaseFirestore.instance.collection("user").get();
           userSnapShots.docs.map((element) {
             if (FirebaseAuth.instance.currentUser!.uid ==
                 element.get("userId")) {
               userModel = UserModel(
-                username: element.get("fName") ?? "",
+                username: element.get("useerName") ?? "",
                 email: element.get("email") ?? "",
-                password: element.get("password") ?? "",
               );
 
               storage.setProfileData(
-                userModel!.username,
                 userModel!.email,
-                userModel!.password,
+                userModel!.username,
               );
             }
           }).toList();
           changeScreenPushUntil(context, ProfileForm());
 
           cToast(msg: "Yay! Signed In 🤩", context: context);
-          // cToast(
-          //     msg: "Yay! Email verifification successful 🤩",
-          //     color: kPrimaryColor,
-          //     context: context);
-          // if (value.user!.emailVerified) {
 
-          // } else {
-          //   cToast(
-          //       msg: "Email not verified yet",
-          //       color: kErrorColor,
-          //       context: context);
-          //   Navigator.pushAndRemoveUntil(
-          //       context,
-          //       MaterialPageRoute(builder: (ctx) => const ConfirmEmail()),
-          //       (route) => false);
-          // }
           return value;
         });
       } else {
@@ -119,10 +100,6 @@ class AuthRepository {
             header: "No network connection 😞",
             body: "Retry",
             path: 'oops.json');
-        // cToast(
-        //     msg: "Oops! No network connection",
-        //     color: kErrorColor,
-        //     context: context);
       }
     } catch (e) {
       print(e.toString());
@@ -137,10 +114,9 @@ class AuthRepository {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
-      showSnackBar(context, "Password Reset Email sent");
+      cToast(msg: 'Password Reset Email sent', context: context);
     } on FirebaseAuthException catch (e) {
-      print(e.message);
-      showSnackBar(context, e.message);
+      cToast(msg: e.message!, context: context);
     }
   }
 
@@ -156,19 +132,4 @@ class AuthRepository {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-  // //Sign out
-  // static Future<void> signOut(BuildContext context) {
-  //       final color = Theme.of(context);
-
-  //   return FirebaseAuth.instance.signOut().then((value) {
-  //     Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (ctx) => const PasswordSignIn()),
-  //         (route) => false);
-  //     cToast(msg: "Signed out", color: kPrimaryColor, context: context);
-  //   });
-  // }
-
-  /// Admin Pass
 }

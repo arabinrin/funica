@@ -15,8 +15,8 @@ cToast({required String msg, required BuildContext context}) {
       iconPositionLeft: 8,
       textStyle: bodySmallText(context).copyWith(color: color.backgroundColor),
       message: msg,
-      backgroundColor: color.primaryColor,
-      icon: Icon(Icons.info_rounded, color: color.primaryColor.withOpacity(.4)),
+      backgroundColor: color.primaryColor..withOpacity(.4),
+      icon: Icon(Icons.info_rounded, color: color.primaryColor),
     ),
   );
 }

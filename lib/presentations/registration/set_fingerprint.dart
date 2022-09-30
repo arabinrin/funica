@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:funica/presentations/home/home_page.dart';
 import 'package:funica/provider/theme_provider.dart';
+import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/navigator.dart';
-import 'package:funica/utils/small_widgets/arrow.dart';
+import 'package:funica/utils/small_widgets/snackbar.dart';
 import 'package:funica/utils/small_widgets/svg.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:funica/widgets/button.dart';
@@ -22,6 +24,7 @@ class Finngerprint extends StatefulWidget {
 
 class _FinngerprintState extends State<Finngerprint> {
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+  final storage = Storage();
   @override
   void initState() {
     getCurrentAppMode();
@@ -57,7 +60,7 @@ class _FinngerprintState extends State<Finngerprint> {
     try {
       canCheckBiometric = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
-      print(e);
+      cToast(msg: e.toString(), context: context);
     }
     if (!mounted) return;
     setState(() {
@@ -92,11 +95,17 @@ class _FinngerprintState extends State<Finngerprint> {
     setState(() {
       authorized = authenticated ? "Authorized" : " to authenticate";
       print(authorized);
+
       if (authenticated) {
-        Future.delayed(Duration(milliseconds: 100), () {
-          showDialog(context: context, builder: (context) => EmotionsForm());
+        storage.box.write('bioDataStatus', true);
+        // print('BIO DATA${storage.isUserBioActive()}');
+        // Future.delayed(Duration(milliseconds: 100), () {
+        //   showDialog(context: context, builder: (context) => EmotionsForm());
+        // });
+        showDialog(context: context, builder: (context) => EmotionsForm())
+            .then((value) {
+          changeScreenReplacement(context, const HomePage());
         });
-        changeScreenReplacement(context, const Finngerprint());
       }
     });
   }
@@ -108,6 +117,7 @@ class _FinngerprintState extends State<Finngerprint> {
     final color = Theme.of(context);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: color.backgroundColor,
         body: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 20.h,
@@ -118,7 +128,6 @@ class _FinngerprintState extends State<Finngerprint> {
               children: [
                 Row(
                   children: [
-                    const ArrowBack(),
                     Text(
                       'Set Your Fingerprint',
                       style: GoogleFonts.poppins(
@@ -131,7 +140,8 @@ class _FinngerprintState extends State<Finngerprint> {
                 ),
                 Text(
                   'Add a PIN to make your account more secure',
-                  style: GoogleFonts.poppins(textStyle: bodyNormalText(context)),
+                  style:
+                      GoogleFonts.poppins(textStyle: bodyNormalText(context)),
                   maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
@@ -150,7 +160,8 @@ class _FinngerprintState extends State<Finngerprint> {
                 ),
                 Text(
                   'Please put your finger on the fingerprint scanner to get started',
-                  style: GoogleFonts.poppins(textStyle: bodyNormalText(context)),
+                  style:
+                      GoogleFonts.poppins(textStyle: bodyNormalText(context)),
                   maxLines: 2,
                   textAlign: TextAlign.center,
                 ),
@@ -162,10 +173,23 @@ class _FinngerprintState extends State<Finngerprint> {
                   children: [
                     SizedBox(
                       width: width / 2.5,
-                      child: Button(
-                          title: 'Skip',
-                          color: color.hoverColor,
-                          textcolor: color.primaryColor),
+                      child: InkWell(
+                        onTap: () {
+                          bool isBio =
+                              storage.box.read('bioDataStatus') ?? false;
+                          if (!isBio) {
+                            changeScreenReplacement(context, const HomePage());
+                          } else {
+                            cToast(
+                                msg: 'Please use the CONTINUE button',
+                                context: context);
+                          }
+                        },
+                        child: Button(
+                            title: 'Skip',
+                            color: color.hoverColor,
+                            textcolor: color.primaryColor),
+                      ),
                     ),
                     SizedBox(
                       width: width / 2.5,
@@ -225,8 +249,8 @@ class _EmotionsFormState extends State<EmotionsForm> {
         ),
       ),
       elevation: 0,
-      backgroundColor: color.hoverColor,
-      child: Container(
+      backgroundColor: color.backgroundColor,
+      child: SizedBox(
         width: 332.w,
         height: height * .6,
         child: Padding(
@@ -255,27 +279,27 @@ class _EmotionsFormState extends State<EmotionsForm> {
                   height: 20.h,
                 ),
                 Text(
-                  'Your account i ready to use. You will be redirected to the Homepage in a few aeconds',
+                  'Your account is ready to use. Dismiss this notice to get to the homepge',
                   style: GoogleFonts.poppins(textStyle: bodySmallText(context)),
                   maxLines: 4,
                   textAlign: TextAlign.center,
                 ),
-                  SizedBox(
+                SizedBox(
                   height: 20.h,
                 ),
-                 SizedBox(
-              height: 50.h,
-              width: 50.w,
-              child: LoadingIndicator(
-                  indicatorType: Indicator.ballSpinFadeLoader,
-                  colors: [
-                    color.primaryColor,
-                    Colors.grey,
-                    color.primaryColor.withOpacity(.5),
-                  ],
-                  strokeWidth: 4,
-                  pathBackgroundColor: color.primaryColor),
-            )
+                SizedBox(
+                  height: 50.h,
+                  width: 50.w,
+                  child: LoadingIndicator(
+                      indicatorType: Indicator.ballSpinFadeLoader,
+                      colors: [
+                        color.primaryColor,
+                        Colors.grey,
+                        color.primaryColor.withOpacity(.5),
+                      ],
+                      strokeWidth: 4,
+                      pathBackgroundColor: color.primaryColor),
+                )
               ],
             ),
           ),

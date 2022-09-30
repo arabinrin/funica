@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/presentations/home/home_page.dart';
 import 'package:funica/presentations/intro/welcome.dart';
 import 'package:funica/presentations/intro/splash_screen.dart';
+import 'package:funica/presentations/registration/set_fingerprint.dart';
 import 'package:funica/provider/theme_provider.dart';
 import 'package:funica/repository/auth_repository.dart';
+import 'package:funica/repository/profile_repository.dart';
 import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/text_resourses/themes_util.dart';
 import 'package:get_storage/get_storage.dart';
@@ -19,7 +21,6 @@ void main() async {
 
   runApp(
     MultiProvider(providers: [
-      ChangeNotifierProvider.value(value: Storage()),
       ChangeNotifierProvider.value(value: DarkThemeProvider()),
     ], child: const MyApp()),
   );
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                       Styles.themeData(themeChangeProvider.darkTheme, context),
 
                   //
-                  home: const AnimatedSplash(),
+                  home: AnimatedSplash(),
                 );
               }),
             ));
@@ -105,12 +106,14 @@ class _MyAppState extends State<MyApp> {
 
 class AnimatedSplash extends StatelessWidget {
   static const route = '/AnimatedSplash';
-  const AnimatedSplash({
+  AnimatedSplash({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final storage = Storage();
+
     return AnimatedSplashScreen(
       splashIconSize: MediaQuery.of(context).size.height,
       splash: const Splash(),
@@ -119,13 +122,9 @@ class AnimatedSplash extends StatelessWidget {
           builder: (context, snapshot) {
             print(snapshot.data);
             if (snapshot.hasData) {
-              // if (UserPreferences.isUserLoggedIn() == true) {
-              return const HomePage();
-              // } else {
-              // return const SplashScreen(
-              // nextScreen: PasswordSignIn(),
-              // );
-              // }
+              bool isBio = storage.box.read('bioDataStatus')?? false;
+              print(isBio);
+              return isBio ? const Finngerprint() : const HomePage();
             } else {
               return const Welcome();
             }
