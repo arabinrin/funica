@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:funica/models/user_model.dart';
 import 'package:funica/presentations/registration/profile_form.dart';
+import 'package:funica/presentations/registration/set_fingerprint.dart';
 import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/dialog.dart';
@@ -88,7 +89,7 @@ class AuthRepository {
               );
             }
           }).toList();
-          changeScreenPushUntil(context, ProfileForm());
+          changeScreenPushUntil(context, Finngerprint());
 
           cToast(msg: "Yay! Signed In 🤩", context: context);
 

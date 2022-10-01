@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/presentations/home/home_page.dart';
+import 'package:funica/presentations/home/page_view.dart';
 import 'package:funica/presentations/intro/welcome.dart';
 import 'package:funica/presentations/intro/splash_screen.dart';
 import 'package:funica/presentations/registration/set_fingerprint.dart';
@@ -124,7 +125,7 @@ class AnimatedSplash extends StatelessWidget {
             if (snapshot.hasData) {
               bool isBio = storage.box.read('bioDataStatus')?? false;
               print(isBio);
-              return isBio ? const Finngerprint() : const HomePage();
+              return isBio ? const Finngerprint() : const PageViewScreen();
             } else {
               return const Welcome();
             }

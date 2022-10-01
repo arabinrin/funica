@@ -173,10 +173,15 @@ class _EmailLogInState extends State<EmailLogIn> {
                     ],
                   ),
                 ),
-                Text(
-                  'Forgot the password?',
-                  style: GoogleFonts.poppins(
-                      textStyle: bodySmallBoldText(context)),
+                InkWell(
+                  onTap: (){
+                    
+                  },
+                  child: Text(
+                    'Forgot the password?',
+                    style: GoogleFonts.poppins(
+                        textStyle: bodySmallBoldText(context)),
+                  ),
                 ),
                 SizedBox(height: 20.h),
                 DividerWithText(width: width * .25, text: 'or continue with'),

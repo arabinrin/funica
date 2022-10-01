@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:funica/presentations/home/home_page.dart';
+import 'package:funica/presentations/home/page_view.dart';
 import 'package:funica/provider/theme_provider.dart';
 import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/navigator.dart';
@@ -104,7 +104,7 @@ class _FinngerprintState extends State<Finngerprint> {
         // });
         showDialog(context: context, builder: (context) => EmotionsForm())
             .then((value) {
-          changeScreenReplacement(context, const HomePage());
+          changeScreenReplacement(context, const PageViewScreen());
         });
       }
     });
@@ -178,7 +178,7 @@ class _FinngerprintState extends State<Finngerprint> {
                           bool isBio =
                               storage.box.read('bioDataStatus') ?? false;
                           if (!isBio) {
-                            changeScreenReplacement(context, const HomePage());
+                            changeScreenReplacement(context, const PageViewScreen());
                           } else {
                             cToast(
                                 msg: 'Please use the CONTINUE button',
