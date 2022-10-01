@@ -36,22 +36,31 @@ dependencies:
   cupertino_icons: ^1.0.2
   shared_preferences:
   provider:
+  fluttertoast: ^8.0.9
+
   flutter_screenutil: ^5.0.1
   animated_splash_screen: ^1.1.0
   animate_do:
   google_fonts: ^2.2.0
   loading_indicator: ^3.1.0
   flutter_svg: ^1.1.5
-  image_gallery_saver: '^1.5.0'
-  gallery_saver: ^2.3.2
+  cloud_firestore:
+  firebase_core: 
+  firebase_auth:
+  firebase_storage: ^10.2.9 
   get_storage: 
   intl_phone_number_input:  ^0.7.0+1
   permission_handler: ^9.0.2
   intl:
   local_auth:
-
+  simple_connection_checker: ^0.2.1
+  firebase_analytics:
+  image_cropper: ^1.5.1 
+  image_picker: ^0.8.4+11 
+  cached_network_image:
   otp_text_field: 
 
+  top_snackbar_flutter:
 
 dev_dependencies:
   flutter_test:

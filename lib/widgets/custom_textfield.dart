@@ -14,6 +14,7 @@ class CustomFormField extends StatelessWidget {
     required String hint,
     //  required Function(String value) validator,
     this.isObscure = false,
+    this.validator,
     this.readOnly = false,
     this.isCapitalized = false,
     this.icon,
@@ -30,6 +31,7 @@ class CustomFormField extends StatelessWidget {
   final TextInputAction _inputAction;
   final Widget? icon;
   final Widget? sufIcon;
+  final String? Function(String?)?  validator;
 
   final String _hint;
 
@@ -49,6 +51,7 @@ class CustomFormField extends StatelessWidget {
         borderRadius: BorderRadius.circular(18.r),
       ),
       child: TextFormField(
+        validator:validator ,
         controller: _emailController,
         focusNode: _emailFocusNode,
         keyboardType: _keyboardtype,

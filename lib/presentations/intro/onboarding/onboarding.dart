@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:funica/presentations/auths/Signup.dart';
 import 'package:funica/presentations/auths/signin.dart';
 import 'package:funica/widgets/button.dart';
 import 'package:funica/presentations/intro/onboarding/onboard.dart';
-import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/svg.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class B1 extends StatelessWidget {
   static const route = '/B1';

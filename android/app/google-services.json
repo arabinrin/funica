@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "517457591300",
+    "project_id": "funica-841f9",
+    "storage_bucket": "funica-841f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517457591300:android:ca68c25cc18894f4604951",
+        "android_client_info": {
+          "package_name": "com.example.funica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517457591300-k5oihpdmjuvk7s10ach15nimg15630ou.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.funica",
+            "certificate_hash": "4992120af4c07fa90a0302cc881382509db4b49d"
+          }
+        },
+        {
+          "client_id": "517457591300-ae2mvnuho5t8h8ee130eopu90rrnpr4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlA_6q9xjnHdrt52_smdaAC49z1fVfG5Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517457591300-ae2mvnuho5t8h8ee130eopu90rrnpr4n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
