@@ -60,21 +60,16 @@ class DatabaseMethods {
         .then((value) {});
   }
 
-  Future<bool>? addChatRoom(chatRoom, chatRoomId) {
+  Future<bool>? addProduct(chatRoom, ProductID) {
     FirebaseFirestore.instance
-        .collection("chatRoom")
-        .doc(chatRoomId)
+        .collection("prodcuts")
+        .doc(ProductID)
         .set(chatRoom)
         .catchError((e) {
       print(e);
     });
     return null;
   }
-
-
-
-
-  
 
 
 }

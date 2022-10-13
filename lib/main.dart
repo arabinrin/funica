@@ -9,6 +9,7 @@ import 'package:funica/presentations/intro/welcome.dart';
 import 'package:funica/presentations/intro/splash_screen.dart';
 import 'package:funica/presentations/registration/set_fingerprint.dart';
 import 'package:funica/provider/theme_provider.dart';
+import 'package:funica/provider/user_provider.dart';
 import 'package:funica/repository/auth_repository.dart';
 import 'package:funica/repository/profile_repository.dart';
 import 'package:funica/repository/user_prefs.dart';
@@ -23,6 +24,7 @@ void main() async {
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider.value(value: DarkThemeProvider()),
+      ChangeNotifierProvider.value(value: UserInfomation()),
     ], child: const MyApp()),
   );
 }
@@ -123,7 +125,7 @@ class AnimatedSplash extends StatelessWidget {
           builder: (context, snapshot) {
             print(snapshot.data);
             if (snapshot.hasData) {
-              bool isBio = storage.box.read('bioDataStatus')?? false;
+              bool isBio = storage.box.read('bioDataStatus') ?? false;
               print(isBio);
               return isBio ? const Finngerprint() : const PageViewScreen();
             } else {

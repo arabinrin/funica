@@ -20,7 +20,7 @@ class _PageViewScreenState extends State<PageViewScreen>
   void initState() {
     super.initState();
     _selectedPageIndex = 0;
-    _pages =const [
+    _pages = [
       HomePage(),
       HomePage(),
       HomePage(),

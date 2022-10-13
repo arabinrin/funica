@@ -50,6 +50,11 @@ TextStyle bodySmallBoldText(BuildContext context) => TextStyle(
       fontSize: 14.sp,
       fontWeight: FontWeight.w500,
     );
+TextStyle bodyverySmallBoldText(BuildContext context) => TextStyle(
+      color: Theme.of(context).primaryColor,
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w500,
+    );
 
 TextStyle hintText(BuildContext context) => TextStyle(
       color: Colors.grey,
