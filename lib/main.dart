@@ -12,6 +12,7 @@ import 'package:funica/provider/theme_provider.dart';
 import 'package:funica/provider/user_provider.dart';
 import 'package:funica/repository/auth_repository.dart';
 import 'package:funica/repository/profile_repository.dart';
+import 'package:funica/repository/storage_service.dart';
 import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/text_resourses/themes_util.dart';
 import 'package:get_storage/get_storage.dart';
@@ -25,6 +26,7 @@ void main() async {
     MultiProvider(providers: [
       ChangeNotifierProvider.value(value: DarkThemeProvider()),
       ChangeNotifierProvider.value(value: UserInfomation()),
+      ChangeNotifierProvider.value(value: Storaged()),
     ], child: const MyApp()),
   );
 }

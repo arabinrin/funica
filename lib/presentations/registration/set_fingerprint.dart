@@ -23,6 +23,7 @@ class Finngerprint extends StatefulWidget {
 }
 
 class _FinngerprintState extends State<Finngerprint> {
+  bool loading = false;
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
   final storage = Storage();
   @override
@@ -102,11 +103,22 @@ class _FinngerprintState extends State<Finngerprint> {
         // Future.delayed(Duration(milliseconds: 100), () {
         //   showDialog(context: context, builder: (context) => EmotionsForm());
         // });
-        showDialog(context: context, builder: (context) => EmotionsForm())
-            .then((value) {
+        if (storage.box.read('first_timer') == false ||
+            storage.box.read('first_timer') == null) {
+          showDialog(context: context, builder: (context) => EmotionsForm())
+              .then((value) {
+           
+            changeScreenReplacement(context, const PageViewScreen());
+          });
+          storage.box.write('first_timer', true);
+        } else {
+          setState(() {
+            loading = true;
+          });
           changeScreenReplacement(context, const PageViewScreen());
-        });
+        }
       }
+      ;
     });
   }
 
@@ -118,95 +130,115 @@ class _FinngerprintState extends State<Finngerprint> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: color.backgroundColor,
-        body: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.h,
-            vertical: 20,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Set Your Fingerprint',
-                      style: GoogleFonts.poppins(
-                          textStyle: bodyNormalBoldText(context)),
-                    )
-                  ],
+        body: loading
+            ? Center(
+              child: SizedBox(
+                  height: 60,
+                  width: 60,
+                  child: LoadingIndicator(
+                      indicatorType: Indicator.ballSpinFadeLoader,
+                      colors: [
+                        color.primaryColor,
+                        Colors.grey,
+                        color.primaryColor.withOpacity(.5),
+                      ],
+                      strokeWidth: 4,
+                      pathBackgroundColor: color.primaryColor),
                 ),
-                SizedBox(
-                  height: 100.h,
-                ),
-                Text(
-                  'Add a PIN to make your account more secure',
-                  style:
-                      GoogleFonts.poppins(textStyle: bodyNormalText(context)),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-                SizedBox(
-                  height: 250.h,
-                  width: 200.w,
-                  child: SvgImage(
-                      name: isDark
-                          ? 'assets/svgs/ingerwhaite.svg'
-                          : 'assets/svgs/fingerdark.svg',
-                      height: height,
-                      width: width),
-                ),
-                Text(
-                  'Please put your finger on the fingerprint scanner to get started',
-                  style:
-                      GoogleFonts.poppins(textStyle: bodyNormalText(context)),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: width / 2.5,
-                      child: InkWell(
-                        onTap: () {
-                          bool isBio =
-                              storage.box.read('bioDataStatus') ?? false;
-                          if (!isBio) {
-                            changeScreenReplacement(context, const PageViewScreen());
-                          } else {
-                            cToast(
-                                msg: 'Please use the CONTINUE button',
-                                context: context);
-                          }
-                        },
-                        child: Button(
-                            title: 'Skip',
-                            color: color.hoverColor,
-                            textcolor: color.primaryColor),
-                      ),
+            )
+            : Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.h,
+                    vertical: 20,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Set Your Fingerprint',
+                              style: GoogleFonts.poppins(
+                                  textStyle: bodyNormalBoldText(context)),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 100.h,
+                        ),
+                        Text(
+                          'Add a PIN to make your account more secure',
+                          style: GoogleFonts.poppins(
+                              textStyle: bodyNormalText(context)),
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 50.h,
+                        ),
+                        SizedBox(
+                          height: 250.h,
+                          width: 200.w,
+                          child: SvgImage(
+                              name: isDark
+                                  ? 'assets/svgs/ingerwhaite.svg'
+                                  : 'assets/svgs/fingerdark.svg',
+                              height: height,
+                              width: width),
+                        ),
+                        Text(
+                          'Please put your finger on the fingerprint scanner to get started',
+                          style: GoogleFonts.poppins(
+                              textStyle: bodyNormalText(context)),
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 50.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: width / 2.5,
+                              child: InkWell(
+                                onTap: () {
+                                  bool isBio =
+                                      storage.box.read('bioDataStatus') ??
+                                          false;
+                                  if (!isBio) {
+                                    changeScreenReplacement(
+                                        context, const PageViewScreen());
+                                  } else {
+                                    cToast(
+                                        msg: 'Please use the CONTINUE button',
+                                        context: context);
+                                  }
+                                },
+                                child: Button(
+                                    title: 'Skip',
+                                    color: color.hoverColor,
+                                    textcolor: color.primaryColor),
+                              ),
+                            ),
+                            SizedBox(
+                              width: width / 2.5,
+                              child: InkWell(
+                                onTap: _authenticate,
+                                child: Button(
+                                    title: 'Continue',
+                                    color: color.primaryColor,
+                                    textcolor: color.backgroundColor),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      width: width / 2.5,
-                      child: InkWell(
-                        onTap: _authenticate,
-                        child: Button(
-                            title: 'Continue',
-                            color: color.primaryColor,
-                            textcolor: color.backgroundColor),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+                  ),
+                ),
+              ),
       ),
     );
   }

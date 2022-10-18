@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funica/presentations/home/home_page.dart';
+import 'package:funica/presentations/product_manager/add_products.dart';
 
 class PageViewScreen extends StatefulWidget {
   const PageViewScreen({
@@ -24,7 +25,7 @@ class _PageViewScreenState extends State<PageViewScreen>
       HomePage(),
       HomePage(),
       HomePage(),
-      HomePage(),
+      ProductForm(),
       HomePage(),
     ];
     _pageController = PageController(initialPage: _selectedPageIndex);

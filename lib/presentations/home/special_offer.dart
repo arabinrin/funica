@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
@@ -13,9 +12,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-
-
 
 class SpecialOffer extends StatefulWidget {
   const SpecialOffer({Key? key}) : super(key: key);
@@ -70,7 +66,6 @@ class _SpecialOfferState extends State<SpecialOffer> {
 
             return SizedBox(
               child: Row(
-
                 children: [
                   Container(
                     padding:
@@ -94,9 +89,10 @@ class _SpecialOfferState extends State<SpecialOffer> {
                         Text(
                           "Today's special!",
                           style: GoogleFonts.poppins(
-                            textStyle: bodySmallBoldText(context)
-                                .copyWith(fontWeight: FontWeight.w700,      fontSize: 15.sp,
-),
+                            textStyle: bodySmallBoldText(context).copyWith(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 15.sp,
+                            ),
                           ),
                         ),
                         SizedBox(height: 10.h),
@@ -113,7 +109,12 @@ class _SpecialOfferState extends State<SpecialOffer> {
                   // SizedBox(
                   //   width: 30.w,
                   // ),
-                   Image.asset(products[index].image!, height:height*.2,width:width*.4 ,fit:BoxFit.fitWidth ,),
+                  Image.asset(
+                    products[index].image![0]!,
+                    height: height * .2,
+                    width: width * .4,
+                    fit: BoxFit.fitWidth,
+                  ),
                 ],
               ),
             );

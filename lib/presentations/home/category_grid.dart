@@ -40,7 +40,7 @@ class CategoryGrid extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: color.hoverColor,
                 ),
-                child: Image.asset(categoryModel[index].imgIcon!),
+                child: Image.asset(categoryModel[index].imgIcon!,color: color.primaryColor),
               ),
               SizedBox(
                 height: 2.h,

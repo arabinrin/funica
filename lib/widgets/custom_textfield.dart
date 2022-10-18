@@ -6,7 +6,7 @@ import 'package:funica/utils/text_resourses/app_textstyle.dart';
 class CustomFormField extends StatelessWidget {
   const CustomFormField({
     super.key,
-    required TextEditingController controller,
+     TextEditingController? controller,
     FocusNode? focusNode,
     required TextInputType keyboardType,
     required TextInputAction inputAction,
@@ -26,7 +26,7 @@ class CustomFormField extends StatelessWidget {
         _inputAction = inputAction,
         _hint = hint;
 
-  final TextEditingController _emailController;
+  final TextEditingController? _emailController;
   final FocusNode? _emailFocusNode;
   final TextInputType _keyboardtype;
   final TextInputAction _inputAction;

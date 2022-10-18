@@ -23,9 +23,8 @@ class ProfileRespository {
     }
   }
 
-  Future<void> croppingImage(pickedImage) async {
+  croppingImage(pickedImage) async {
     File? croppedFile = await ImageCropper().cropImage(
-      
       sourcePath: pickedImage.path,
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
@@ -46,22 +45,21 @@ class ProfileRespository {
         minimumAspectRatio: 1.0,
       ),
     );
+    // return File(croppedFile!.path);
     await uploadToStorage(File(croppedFile!.path));
-
   }
 
 // upload to firebase storage
   Future<void> uploadToStorage(File image) async {
     Reference ref = FirebaseStorage.instance
         .ref()
-        .child('profilePics')
+        .child('image')
         .child(FirebaseAuth.instance.currentUser!.uid);
 
     UploadTask uploadTask = ref.putFile(image);
     TaskSnapshot snap = await uploadTask;
     String downloadUrl = await snap.ref.getDownloadURL();
     String userId = FirebaseAuth.instance.currentUser!.uid.toString();
-    await FirebaseAuth.instance.currentUser!.updatePhotoURL(downloadUrl);
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -77,10 +75,7 @@ class ProfileRespository {
   }
 
   Future<void> editUserInfo(UserDetail userDetail) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set({
+    await FirebaseFirestore.instance.collection('products').doc().set({
       "userId": FirebaseAuth.instance.currentUser!.uid,
       "userName": userDetail.nickname,
       "fullName": userDetail.fName,
