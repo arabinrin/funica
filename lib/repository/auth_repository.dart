@@ -10,7 +10,6 @@ import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/dialog.dart';
 import 'package:funica/utils/small_widgets/snackbar.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_connection_checker/simple_connection_checker.dart';
 
 class AuthRepository {
@@ -69,7 +68,7 @@ class AuthRepository {
 
     try {
       if (isConnected == true) {
-        UserCredential userCredential = await FirebaseAuth.instance
+       await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
             .then((value) async {
           await storage.setIsUserLoggedIn(true);
@@ -79,8 +78,8 @@ class AuthRepository {
             if (FirebaseAuth.instance.currentUser!.uid ==
                 element.get("userId")) {
               userModel = UserModel(
-                username: element.get("useerName") ?? "",
-                email: element.get("email") ?? "",
+                username: element.get('userName').toString() ,
+                email: element.get("email").toString(),
               );
 
               storage.setProfileData(

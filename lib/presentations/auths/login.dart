@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/presentations/auths/email_signIn.dart';
 import 'package:funica/repository/auth_repository.dart';
@@ -9,7 +8,6 @@ import 'package:funica/utils/small_widgets/divider.dart';
 import 'package:funica/utils/small_widgets/logo.dart';
 import 'package:funica/utils/small_widgets/logo_button.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
-import 'package:funica/widgets/auth_button.dart';
 import 'package:funica/widgets/button.dart';
 import 'package:funica/widgets/custom_textfield.dart';
 import 'package:google_fonts/google_fonts.dart';

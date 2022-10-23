@@ -30,7 +30,7 @@ class _FinngerprintState extends State<Finngerprint> {
   void initState() {
     getCurrentAppMode();
     _checkBiometric();
-    _getAvailableBiometric();
+    // _getAvailableBiometric();
 
     super.initState();
   }
@@ -52,34 +52,34 @@ class _FinngerprintState extends State<Finngerprint> {
   }
 
   LocalAuthentication auth = LocalAuthentication();
-  bool _canCheckBiometric = true;
-  List<BiometricType> _availableBiometric = [];
+  // bool _canCheckBiometric = true;
+  // List<BiometricType> _availableBiometric = [];
   String authorized = "Not authorized";
 
   Future<void> _checkBiometric() async {
-    late bool canCheckBiometric;
+    // late bool canCheckBiometric;
     try {
-      canCheckBiometric = await auth.canCheckBiometrics;
+      // canCheckBiometric = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
       cToast(msg: e.toString(), context: context);
     }
     if (!mounted) return;
     setState(() {
-      _canCheckBiometric = canCheckBiometric;
+      // _canCheckBiometric = canCheckBiometric;
     });
   }
 
-  Future<void> _getAvailableBiometric() async {
-    late List<BiometricType> availableBiometric;
-    try {
-      availableBiometric = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    setState(() {
-      _availableBiometric = availableBiometric;
-    });
-  }
+  // Future<void> _getAvailableBiometric() async {
+  //   late List<BiometricType> availableBiometric;
+  //   try {
+  //     availableBiometric = await auth.getAvailableBiometrics();
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //   }
+  //   setState(() {
+  //     // _availableBiometric = availableBiometric;
+  //   });
+  // }
 
   Future<void> _authenticate() async {
     bool authenticated = false;
@@ -272,7 +272,6 @@ class _EmotionsFormState extends State<EmotionsForm> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     final color = Theme.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(

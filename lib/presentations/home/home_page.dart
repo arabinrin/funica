@@ -139,7 +139,7 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: const SpecialOffer(),
+                    child:  SpecialOffer(),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:funica/presentations/intro/onboarding/onboarding.dart';
 import 'package:funica/utils/navigator.dart';
-import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

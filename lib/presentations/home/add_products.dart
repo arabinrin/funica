@@ -388,6 +388,7 @@ class _ProductFormState extends State<ProductForm> {
                       onSubmitted: (outstandingValue) {
                         setState(() {
                           _values.add(outstandingValue);
+                          
                         });
                       },
                       inputDecoration: InputDecoration(
@@ -398,6 +399,7 @@ class _ProductFormState extends State<ProductForm> {
                       onTagChanged: (newValue) {
                         setState(() {
                           _values.add(newValue);
+                          _onPressedModifyTextField;
                         });
                       },
                       tagBuilder: (context, index) => _Chip(

@@ -1,17 +1,18 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:funica/presentations/home/home_page.dart';
 import 'package:funica/presentations/home/page_view.dart';
-import 'package:funica/presentations/intro/welcome.dart';
+
 import 'package:funica/presentations/intro/splash_screen.dart';
+
+import 'package:funica/presentations/intro/welcome.dart';
 import 'package:funica/presentations/registration/set_fingerprint.dart';
 import 'package:funica/provider/theme_provider.dart';
 import 'package:funica/provider/user_provider.dart';
-import 'package:funica/repository/auth_repository.dart';
-import 'package:funica/repository/profile_repository.dart';
 import 'package:funica/repository/storage_service.dart';
 import 'package:funica/repository/user_prefs.dart';
 import 'package:funica/utils/text_resourses/themes_util.dart';
@@ -32,7 +33,7 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   bool period() {
-    var hour = DateTime.now().hour;
+    final int hour = DateTime.now().hour;
     if (hour < 20 && hour > 6) {
       return false;
     } else {
@@ -78,7 +79,7 @@ class _MyAppState extends State<MyApp> {
 
     return ScreenUtilInit(
         designSize: const Size(375, 812),
-        builder: (BuildContext context, widget) => MultiProvider(
+        builder: (BuildContext context, Widget? widget) => MultiProvider(
               providers: [
                 ChangeNotifierProvider(
                   create: (_) {
@@ -87,10 +88,10 @@ class _MyAppState extends State<MyApp> {
                 )
               ],
               child: Consumer<DarkThemeProvider>(
-                  builder: (BuildContext context, value, Widget? child) {
+                  builder: (BuildContext context, DarkThemeProvider value, Widget? child) {
                 return MaterialApp(
                   debugShowCheckedModeBanner: false,
-                  builder: (context, widget) {
+                  builder: (BuildContext context, Widget? widget) {
                     // ScreenUtil.setContext(context);
                     return MediaQuery(
                       data:
@@ -102,38 +103,37 @@ class _MyAppState extends State<MyApp> {
                       Styles.themeData(themeChangeProvider.darkTheme, context),
 
                   //
-                  home: AnimatedSplash(),
+                  home:const AnimatedSplash(),
                 );
-              }),
-            ));
+              },),
+            ),);
   }
 }
 
 class AnimatedSplash extends StatelessWidget {
-  static const route = '/AnimatedSplash';
-  AnimatedSplash({
-    Key? key,
-  }) : super(key: key);
+  const AnimatedSplash({super.key});
 
+  final String route = '/AnimatedSplash';
   @override
   Widget build(BuildContext context) {
-    final storage = Storage();
+    final Storage storage = Storage();
 
     return AnimatedSplashScreen(
       splashIconSize: MediaQuery.of(context).size.height,
       splash: const Splash(),
+      // ignore: always_specify_types
       nextScreen: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            print(snapshot.data);
+          builder: (BuildContext context,AsyncSnapshot<Object?> snapshot) {
+            // print(snapshot.data);
             if (snapshot.hasData) {
-              bool isBio = storage.box.read('bioDataStatus') ?? false;
-              print(isBio);
+             final bool isBio = storage.box.read('bioDataStatus') ?? false;
+              // print(isBio);
               return isBio ? const Finngerprint() : const PageViewScreen();
             } else {
               return const Welcome();
             }
-          }),
+          },),
       splashTransition: SplashTransition.fadeTransition,
       // pageTransitionType: PageTransitionType.scale,
       duration: 2000,

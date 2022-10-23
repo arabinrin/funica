@@ -18,7 +18,6 @@ import 'package:funica/widgets/selector.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl/intl.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -66,10 +65,10 @@ class _ProfileFormState extends State<ProfileForm> {
         .then((snapshot) {
       if (snapshot != null) {
         setState(() {
-          birthdayController.text = snapshot['birthday'];
-          genderControlller.text = snapshot['gender'];
-          userPhoneController.text = snapshot['phone'];
-          fullNameController.text = snapshot['fullName'];
+          birthdayController.text = snapshot['birthday'].toString();
+          genderControlller.text = snapshot['gender'].toString();
+          userPhoneController.text = snapshot['phone'].toString();
+          fullNameController.text = snapshot['fullName'].toString();
         });
       } else {
         setState(() {
@@ -296,7 +295,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                           ])).then((value) {
                                 // print(value);
                                 setState(() {
-                                  genderControlller.text = value ?? '';
+                                  genderControlller.text = value.toString();
                                 });
                               });
                             },

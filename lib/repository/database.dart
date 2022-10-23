@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseMethods {
-  Future<void> addUserInfo(userData) async {
-    FirebaseFirestore.instance
-        .collection("users")
+  Future<void> addUserInfo(Map<String, dynamic> userData) async {
+    await FirebaseFirestore.instance
+        .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set(userData)
         .catchError((e) {});
@@ -20,8 +20,8 @@ class DatabaseMethods {
 
   getUserInfo(String email) async {
     return FirebaseFirestore.instance
-        .collection("users")
-        .where("userEmail", isEqualTo: email)
+        .collection('users')
+        .where('userEmail', isEqualTo: email)
         .get()
         .catchError((e) {
       print(e.toString());
@@ -38,7 +38,6 @@ class DatabaseMethods {
     });
     // final userDate = userDoc as dynamic;
   }
-
 
   searchByName(String searchField) {
     return FirebaseFirestore.instance
@@ -60,10 +59,10 @@ class DatabaseMethods {
         .then((value) {});
   }
 
-  Future<bool>? addProduct(chatRoom, ProductID) {
+  Future<bool>? addProduct(Map<String, dynamic> chatRoom, String productID) {
     FirebaseFirestore.instance
         .collection("prodcuts")
-        .doc(ProductID)
+        .doc(productID)
         .set(chatRoom)
         .catchError((e) {
       print(e);

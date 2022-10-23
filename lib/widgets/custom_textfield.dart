@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
 
 class CustomFormField extends StatelessWidget {
@@ -87,7 +89,6 @@ class CustomFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.r),
             borderSide: BorderSide(
               color: color.primaryColor,
-              width: 1,
             ),
           ),
           enabledBorder: OutlineInputBorder(

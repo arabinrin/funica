@@ -12,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfileRespository {
   void pickImage(BuildContext context) async {
-    final pickedImage =
+    final XFile? pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
       await croppingImage(pickedImage);
@@ -25,7 +25,7 @@ class ProfileRespository {
 
   croppingImage(pickedImage) async {
     File? croppedFile = await ImageCropper().cropImage(
-      sourcePath: pickedImage.path,
+      sourcePath: pickedImage.path.toString(),
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
         CropAspectRatioPreset.ratio3x2,

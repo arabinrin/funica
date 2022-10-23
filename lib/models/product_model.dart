@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_if_null_operators, prefer_null_aware_operators
+
 import 'dart:convert';
 
 class ProductModel {
@@ -6,9 +8,9 @@ class ProductModel {
   final List<dynamic>? color;
   final int? quantity;
   final double? price;
-  List<String?>? image;
+  List<dynamic>? image;
   final bool? favourite;
-  final bool? wishlist;
+  final bool? special;
   final int? soldQuantity;
   final int? review;
   final double? rating;
@@ -25,7 +27,7 @@ class ProductModel {
     this.price,
     this.image,
     this.favourite,
-    this.wishlist,
+    this.special,
     this.soldQuantity,
     this.rating,
     this.review,
@@ -43,7 +45,7 @@ class ProductModel {
     double? price,
     List<String?>? image,
     bool? favourite,
-    bool? wishlist,
+    bool? special,
     int? soldQuantity,
     int? review,
     double? rating,
@@ -60,7 +62,7 @@ class ProductModel {
       price: price ?? this.price,
       image: image ?? this.image,
       favourite: favourite ?? this.favourite,
-      wishlist: wishlist ?? this.wishlist,
+      special: special ?? this.special,
       soldQuantity: soldQuantity ?? this.soldQuantity,
       review: review ?? this.review,
       rating: rating ?? this.rating,
@@ -80,7 +82,7 @@ class ProductModel {
       'price': price,
       'image': image,
       'favourite': favourite,
-      'wishlist': wishlist,
+      'special': special,
       'soldQuantity': soldQuantity,
       'review': review,
       'rating': rating,
@@ -98,9 +100,9 @@ class ProductModel {
       color: map['color'] != null ? List<dynamic>.from(map['color']) : null,
       quantity: map['quantity'] != null ? map['quantity'].toInt() : null,
       price: map['price'] != null ? map['price']?.toDouble() : null,
-      image: map['image'] != null ? map['image'] : null,
+      image:  map['image'] != null ? List<dynamic>.from(map['image']) : null,
       favourite: map['favourite'] != null ? map['favourite'] : null,
-      wishlist: map['wishlist'] != null ? map['wishlist'] : null,
+      special: map['special'] != null ? map['special'] : null,
       soldQuantity:
           map['soldQuantity'] != null ? map['soldQuantity']?.toInt() : null,
       review: map['review'] != null ? map['review']?.toInt() : null,
@@ -121,7 +123,7 @@ class ProductModel {
       ProductModel.fromMap(json.decode(source));
 }
 
-List<ProductModel> products = [
+List<ProductModel> product = [
   ProductModel(
       productName: 'Brown Ergonomic Chair',
       description:
@@ -131,7 +133,7 @@ List<ProductModel> products = [
       price: 15.7,
       image: ['assets/products/lorraine-tufted.png'],
       favourite: true,
-      wishlist: false,
+      special: false,
       soldQuantity: 5,
       rating: 3.4,
       review: 40,
@@ -148,7 +150,7 @@ List<ProductModel> products = [
       price: 15.7,
       image: ['assets/products/ergonomic.png'],
       favourite: true,
-      wishlist: false,
+      special: false,
       soldQuantity: 5,
       rating: 3.4,
       review: 40,
@@ -165,7 +167,7 @@ List<ProductModel> products = [
       price: 15.7,
       image: ['assets/products/lorraine-tufted.png'],
       favourite: true,
-      wishlist: false,
+      special: false,
       soldQuantity: 5,
       rating: 3.4,
       review: 40,
@@ -182,7 +184,7 @@ List<ProductModel> products = [
       price: 15.7,
       image: ['assets/products/ergonomic.png'],
       favourite: true,
-      wishlist: false,
+      special: false,
       soldQuantity: 5,
       rating: 3.4,
       review: 40,

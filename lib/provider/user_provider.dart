@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:funica/repository/database.dart';
-import 'package:provider/provider.dart';
 
 class UserInfomation with ChangeNotifier {
   DatabaseMethods databaseMethods = DatabaseMethods();
@@ -13,11 +12,14 @@ class UserInfomation with ChangeNotifier {
         .getUserdataById(FirebaseAuth.instance.currentUser!.uid)
         .then((snapshot) {
       if (snapshot != null) {
-        email = snapshot['email'];
-        name = snapshot['fullName'];
-        pic = snapshot['profilePhoto'];
+        email = snapshot['email'].toString();
+        name = snapshot['fullName'].toString();
+        pic = snapshot['profilePhoto'].toString();
       } else {}
     });
     notifyListeners();
   }
 }
+
+
+ 

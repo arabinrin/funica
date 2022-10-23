@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 void changeScreen(BuildContext context, Widget widget) {
   Navigator.push(
-    context,
-    PageRouteBuilder(
+     context,
+     PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 200),
       reverseTransitionDuration: const Duration(milliseconds: 200),
       pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
