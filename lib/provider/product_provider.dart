@@ -20,7 +20,7 @@ class ProductProvider with ChangeNotifier {
           .get();
       print('${querySnapshot.docs}');
       List<ProductModel> products = querySnapshot.docs
-          .map((e) => ProductModel.fromMap(e.data() as Map<String, dynamic>))
+          .map((QueryDocumentSnapshot<Object?> e) => ProductModel.fromMap(e.data() as Map<String, dynamic>))
           .toList();
 
       print('$products');

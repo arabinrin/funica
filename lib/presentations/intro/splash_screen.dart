@@ -8,7 +8,7 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
     return Scaffold(
       body: Padding(
@@ -39,7 +39,7 @@ class Splash extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.w600,
                       color: color.primaryColor,
-                    )),
+                    ),),
                   )
                 ],
               ),
@@ -55,7 +55,7 @@ class Splash extends StatelessWidget {
                     color.primaryColor.withOpacity(.5),
                   ],
                   strokeWidth: 4,
-                  pathBackgroundColor: color.primaryColor),
+                  pathBackgroundColor: color.primaryColor,),
             )
           ],
         ),

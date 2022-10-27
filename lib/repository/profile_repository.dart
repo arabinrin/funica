@@ -23,10 +23,10 @@ class ProfileRespository {
     }
   }
 
-  croppingImage(pickedImage) async {
-    File? croppedFile = await ImageCropper().cropImage(
+  dynamic croppingImage(dynamic pickedImage) async {
+    final File? croppedFile = await ImageCropper().cropImage(
       sourcePath: pickedImage.path.toString(),
-      aspectRatioPresets: [
+      aspectRatioPresets: <CropAspectRatioPreset>[
         CropAspectRatioPreset.square,
         CropAspectRatioPreset.ratio3x2,
         CropAspectRatioPreset.original,
@@ -34,13 +34,14 @@ class ProfileRespository {
         CropAspectRatioPreset.ratio16x9
       ],
       androidUiSettings: const AndroidUiSettings(
-          toolbarTitle: 'Crop to your taste',
-          toolbarColor: Colors.black,
-          statusBarColor: Colors.black,
-          toolbarWidgetColor: Colors.white,
-          activeControlsWidgetColor: Colors.black87,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
+        toolbarTitle: 'Crop to your taste',
+        toolbarColor: Colors.black,
+        statusBarColor: Colors.black,
+        toolbarWidgetColor: Colors.white,
+        activeControlsWidgetColor: Colors.black87,
+        initAspectRatio: CropAspectRatioPreset.original,
+        lockAspectRatio: false,
+      ),
       iosUiSettings: const IOSUiSettings(
         minimumAspectRatio: 1.0,
       ),
@@ -51,39 +52,39 @@ class ProfileRespository {
 
 // upload to firebase storage
   Future<void> uploadToStorage(File image) async {
-    Reference ref = FirebaseStorage.instance
+    final Reference ref = FirebaseStorage.instance
         .ref()
         .child('image')
         .child(FirebaseAuth.instance.currentUser!.uid);
 
-    UploadTask uploadTask = ref.putFile(image);
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    String userId = FirebaseAuth.instance.currentUser!.uid.toString();
+    final UploadTask uploadTask = ref.putFile(image);
+    final TaskSnapshot snap = await uploadTask;
+    final String downloadUrl = await snap.ref.getDownloadURL();
+    final String userId = FirebaseAuth.instance.currentUser!.uid.toString();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({
-      "userId": userId.toString(),
+      'userId': userId.toString(),
     }, SetOptions(merge: true));
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .set({
-      "profilePhoto": downloadUrl.toString(),
+      'profilePhoto': downloadUrl.toString(),
     }, SetOptions(merge: true));
   }
 
   Future<void> editUserInfo(UserDetail userDetail) async {
     await FirebaseFirestore.instance.collection('products').doc().set({
-      "userId": FirebaseAuth.instance.currentUser!.uid,
-      "userName": userDetail.nickname,
-      "fullName": userDetail.fName,
-      "birthday": userDetail.birthday,
-      "email": userDetail.email,
-      "phone": userDetail.phoneNum,
-      "gender": userDetail.gender,
-      "profilePhoto": userDetail.imgUrl,
+      'userId': FirebaseAuth.instance.currentUser!.uid,
+      'userName': userDetail.nickname,
+      'fullName': userDetail.fName,
+      'birthday': userDetail.birthday,
+      'email': userDetail.email,
+      'phone': userDetail.phoneNum,
+      'gender': userDetail.gender,
+      'profilePhoto': userDetail.imgUrl,
     }, SetOptions(merge: true));
   }
 }

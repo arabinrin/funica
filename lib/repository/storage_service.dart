@@ -5,29 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class Storaged with ChangeNotifier {
-  List<String?> get getImagePath {
+  List<String> get getImagePath {
     return imagePat;
   }
 
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
-  List<String?> imagePat = [];
+  List<String> imagePat = <String>[];
 
   Future<List<String>> uploadFile(List<XFile> filePath) async {
-    List<String> _path = [];
-    for (XFile _image in filePath) {
-      var imageUrl = await uploadImage(_image);
+    final List<String> path = [];
+    for (final XFile image in filePath) {
+      final String imageUrl = await uploadImage(image);
 
-      _path.add(imageUrl);
+      path.add(imageUrl);
     }
 
-    print('this is $_path');
+    // print('this is $path');
 
-    imagePat = _path;
+    imagePat = path;
     notifyListeners();
 
-    return _path;
+    return path;
   }
 
   // Future<firebase_storage.ListResult> listFiles() async{
@@ -40,7 +40,7 @@ class Storaged with ChangeNotifier {
   // }
 
   Future<String> uploadImage(XFile image) async {
-    Reference db = storage
+    final Reference db = storage
         .ref()
         .child('product/')
         .child(image.name);

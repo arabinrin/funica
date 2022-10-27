@@ -85,7 +85,7 @@ class DynamicSelector extends StatelessWidget {
                           ),
                         ),
                       );
-                    }),
+                    },),
               ),
             ],
           ),

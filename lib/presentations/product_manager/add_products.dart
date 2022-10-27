@@ -74,17 +74,17 @@ class _ProductFormState extends State<ProductForm> {
     colorList!.clear();
   }
 
-  _onPressedModifyTextField() {
-    final text = _values.toString();
-    productTag.text = text;
-    productTag.value = productTag.value.copyWith(
-      text: text,
-      selection: TextSelection(
-        baseOffset: text.length,
-        extentOffset: text.length,
-      ),
-    );
-  }
+  //  _onPressedModifyTextField() {
+  //   final text = _values.toString();
+  //   productTag.text = text;
+  //   productTag.value = productTag.value.copyWith(
+  //     text: text,
+  //     selection: TextSelection(
+  //       baseOffset: text.length,
+  //       extentOffset: text.length,
+  //     ),
+  //   );
+  // }
 
   _onDelete(int index) {
     setState(() {

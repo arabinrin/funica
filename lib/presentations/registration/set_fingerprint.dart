@@ -16,7 +16,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:local_auth/local_auth.dart';
 
 class Finngerprint extends StatefulWidget {
-  const Finngerprint({Key? key}) : super(key: key);
+  const Finngerprint({super.key});
 
   @override
   State<Finngerprint> createState() => _FinngerprintState();
@@ -25,7 +25,7 @@ class Finngerprint extends StatefulWidget {
 class _FinngerprintState extends State<Finngerprint> {
   bool loading = false;
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
-  final storage = Storage();
+  final Storage storage = Storage();
   @override
   void initState() {
     getCurrentAppMode();
@@ -43,7 +43,7 @@ class _FinngerprintState extends State<Finngerprint> {
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
   bool isAuthenticated = false;
-  final storedPasscode = '1234';
+  final String storedPasscode = '1234';
 
   @override
   void dispose() {
@@ -54,7 +54,7 @@ class _FinngerprintState extends State<Finngerprint> {
   LocalAuthentication auth = LocalAuthentication();
   // bool _canCheckBiometric = true;
   // List<BiometricType> _availableBiometric = [];
-  String authorized = "Not authorized";
+  String authorized = 'Not authorized';
 
   Future<void> _checkBiometric() async {
     // late bool canCheckBiometric;
@@ -85,7 +85,7 @@ class _FinngerprintState extends State<Finngerprint> {
     bool authenticated = false;
     try {
       authenticated = await auth.authenticate(
-        localizedReason: "Scan your finger to authenticate",
+        localizedReason: 'Scan your finger to authenticate',
         // useErrorDialogs: true,
         // stickyAuth: false,
       );
@@ -94,7 +94,7 @@ class _FinngerprintState extends State<Finngerprint> {
     }
     if (!mounted) return;
     setState(() {
-      authorized = authenticated ? "Authorized" : " to authenticate";
+      authorized = authenticated ? 'Authorized' : ' to authenticate';
       print(authorized);
 
       if (authenticated) {
@@ -105,8 +105,8 @@ class _FinngerprintState extends State<Finngerprint> {
         // });
         if (storage.box.read('first_timer') == false ||
             storage.box.read('first_timer') == null) {
-          showDialog(context: context, builder: (context) => EmotionsForm())
-              .then((value) {
+          showDialog(context: context, builder: (BuildContext context) => EmotionsForm())
+              .then(( dynamic value) {
            
             changeScreenReplacement(context, const PageViewScreen());
           });
@@ -124,9 +124,9 @@ class _FinngerprintState extends State<Finngerprint> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final ThemeData color = Theme.of(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: color.backgroundColor,
@@ -143,7 +143,7 @@ class _FinngerprintState extends State<Finngerprint> {
                         color.primaryColor.withOpacity(.5),
                       ],
                       strokeWidth: 4,
-                      pathBackgroundColor: color.primaryColor),
+                      pathBackgroundColor: color.primaryColor,),
                 ),
             )
             : Center(
@@ -160,7 +160,7 @@ class _FinngerprintState extends State<Finngerprint> {
                             Text(
                               'Set Your Fingerprint',
                               style: GoogleFonts.poppins(
-                                  textStyle: bodyNormalBoldText(context)),
+                                  textStyle: bodyNormalBoldText(context),),
                             )
                           ],
                         ),
@@ -170,7 +170,7 @@ class _FinngerprintState extends State<Finngerprint> {
                         Text(
                           'Add a PIN to make your account more secure',
                           style: GoogleFonts.poppins(
-                              textStyle: bodyNormalText(context)),
+                              textStyle: bodyNormalText(context),),
                           maxLines: 2,
                           textAlign: TextAlign.center,
                         ),
@@ -185,12 +185,12 @@ class _FinngerprintState extends State<Finngerprint> {
                                   ? 'assets/svgs/ingerwhaite.svg'
                                   : 'assets/svgs/fingerdark.svg',
                               height: height,
-                              width: width),
+                              width: width,),
                         ),
                         Text(
                           'Please put your finger on the fingerprint scanner to get started',
                           style: GoogleFonts.poppins(
-                              textStyle: bodyNormalText(context)),
+                              textStyle: bodyNormalText(context),),
                           maxLines: 2,
                           textAlign: TextAlign.center,
                         ),
@@ -209,17 +209,17 @@ class _FinngerprintState extends State<Finngerprint> {
                                           false;
                                   if (!isBio) {
                                     changeScreenReplacement(
-                                        context, const PageViewScreen());
+                                        context, const PageViewScreen(),);
                                   } else {
                                     cToast(
                                         msg: 'Please use the CONTINUE button',
-                                        context: context);
+                                        context: context,);
                                   }
                                 },
                                 child: Button(
                                     title: 'Skip',
                                     color: color.hoverColor,
-                                    textcolor: color.primaryColor),
+                                    textcolor: color.primaryColor,),
                               ),
                             ),
                             SizedBox(
@@ -229,7 +229,7 @@ class _FinngerprintState extends State<Finngerprint> {
                                 child: Button(
                                     title: 'Continue',
                                     color: color.primaryColor,
-                                    textcolor: color.backgroundColor),
+                                    textcolor: color.backgroundColor,),
                               ),
                             ),
                           ],
@@ -246,8 +246,8 @@ class _FinngerprintState extends State<Finngerprint> {
 
 class EmotionsForm extends StatefulWidget {
   EmotionsForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<EmotionsForm> createState() => _EmotionsFormState();
@@ -271,8 +271,8 @@ class _EmotionsFormState extends State<EmotionsForm> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final ThemeData color = Theme.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -296,7 +296,7 @@ class _EmotionsFormState extends State<EmotionsForm> {
                         ? 'assets/svgs/doneblack.svg'
                         : 'assets/svgs/donewhite.svg',
                     height: 250.h,
-                    width: 250.w),
+                    width: 250.w,),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -329,7 +329,7 @@ class _EmotionsFormState extends State<EmotionsForm> {
                         color.primaryColor.withOpacity(.5),
                       ],
                       strokeWidth: 4,
-                      pathBackgroundColor: color.primaryColor),
+                      pathBackgroundColor: color.primaryColor,),
                 )
               ],
             ),

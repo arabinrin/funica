@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -86,41 +85,41 @@ class ProductRespository {
   //   // }, SetOptions(merge: true));
   //   return downloadUrl;
   // }
+  
 
   Future<void> produtInfo(ProductModel products, BuildContext context) async {
     print('uploading product');
-    String id = FirebaseFirestore.instance
+    final String id = FirebaseFirestore.instance
         .collection('products')
-        .doc(products.productCategory!)
+        .doc(products.productCategory)
         .collection(products.productCategory!)
         .doc()
         .id;
     try {
       await FirebaseFirestore.instance
           .collection('products')
-          .doc(products.productCategory!)
+          .doc(products.productCategory)
           .collection(products.productCategory!)
           .doc(id)
           .set({
-        "productId": id,
-        "productName": products.productName,
-        "description": products.description,
-        "color": products.color,
-        "quantity": products.quantity,
-        "price": products.price,
-        "image": products.image,
-        "soldQuantity": products.soldQuantity,
-        "discount": products.discount,
+        'productId': id,
+        'productName': products.productName,
+        'description': products.description,
+        'color': products.color,
+        'quantity': products.quantity,
+        'price': products.price,
+        'image': products.image,
+        'soldQuantity': products.soldQuantity,
+        'discount': products.discount,
         'productCategory': products.productCategory,
         'productTag': products.productTag,
-      }, SetOptions(merge: true)).then((value) => null);
-      print('product uploaded');
-    } on SocketException catch (e) {
+      }, SetOptions(merge: true),);
+      // print('product uploaded');
       cToast(
         context: context,
-        msg: "Something went wrong with your internet",
+        msg: 'Something went wrong with your internet',
       );
-      print(e.message);
+      // print(e.message);
     } on FirebaseException catch (e) {
       cToast(msg: e.message.toString(), context: context);
     }

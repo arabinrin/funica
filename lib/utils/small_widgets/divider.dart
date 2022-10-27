@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class DividerWithText extends StatelessWidget {
   const DividerWithText({
-    Key? key,
+    super.key,
     required this.width,
     required this.text,
-  }) : super(key: key);
+  });
 
   final double width;
   final String text;
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
       SizedBox(
         width: width,
         child: Divider(
@@ -39,6 +39,6 @@ class DividerWithText extends StatelessWidget {
           color: color.hintColor,
         ),
       ),
-    ]);
+    ],);
   }
 }

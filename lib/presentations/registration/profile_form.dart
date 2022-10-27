@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/models/user_model.dart';
@@ -16,8 +15,8 @@ import 'package:funica/widgets/button.dart';
 import 'package:funica/widgets/custom_textfield.dart';
 import 'package:funica/widgets/selector.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -28,7 +27,7 @@ class ProfileForm extends StatefulWidget {
 }
 
 class _ProfileFormState extends State<ProfileForm> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DatabaseMethods databaseMethods = DatabaseMethods();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController nickNameController = TextEditingController();
@@ -43,7 +42,7 @@ class _ProfileFormState extends State<ProfileForm> {
   DateTime brithdayPick = DateTime.now();
   String dropdownvalue = 'Choose Gender';
 
-  final formrepository = ProfileRespository();
+  final ProfileRespository formrepository = ProfileRespository();
   String? pic;
   String? email;
   String? username;
@@ -62,7 +61,7 @@ class _ProfileFormState extends State<ProfileForm> {
   userInfo() async {
     await databaseMethods
         .getUserdataById(FirebaseAuth.instance.currentUser!.uid)
-        .then((snapshot) {
+        .then((dynamic snapshot) {
       if (snapshot != null) {
         setState(() {
           birthdayController.text = snapshot['birthday'].toString();
@@ -72,7 +71,7 @@ class _ProfileFormState extends State<ProfileForm> {
         });
       } else {
         setState(() {
-          final snackBar = SnackBar(content: Text('Error geting user profile'));
+          const SnackBar snackBar = SnackBar(content: Text('Error geting user profile'));
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         });
       }
@@ -81,11 +80,11 @@ class _ProfileFormState extends State<ProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    String? formattedBirthDate = DateFormat('yyyy-MM-dd').format(brithdayPick);
+    final String formattedBirthDate = DateFormat('yyyy-MM-dd').format(brithdayPick);
 
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final ThemeData color = Theme.of(context);
     return SafeArea(
       child: Scaffold(
           body: Container(
@@ -93,14 +92,14 @@ class _ProfileFormState extends State<ProfileForm> {
         width: width,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
         child: SingleChildScrollView(
-          child: Column(children: [
+          child: Column(children:<Widget> [
             Row(
-              children: [
+              children:<Widget> [
                 const ArrowBack(),
                 Text(
                   'Fill Your Profile',
                   style: GoogleFonts.poppins(
-                      textStyle: bodyNormalBoldText(context)),
+                      textStyle: bodyNormalBoldText(context),),
                 )
               ],
             ),
@@ -110,7 +109,7 @@ class _ProfileFormState extends State<ProfileForm> {
             Form(
                 key: _formKey,
                 child: Column(
-                  children: [
+                  children:<Widget> [
                     InkWell(
                       onTap: () async {
                         formrepository.pickImage(context);
@@ -132,22 +131,22 @@ class _ProfileFormState extends State<ProfileForm> {
                                 child: CachedNetworkImage(
                                   fit: BoxFit.cover,
                                   imageUrl: pic != null ? pic! : '',
-                                  placeholder: (context, url) => SvgImage(
+                                  placeholder: (BuildContext context, String url) => SvgImage(
                                       name: 'assets/svgs/profile.svg',
                                       height: 150.h,
-                                      width: 150.w),
-                                  errorWidget: (context, url, error) =>
+                                      width: 150.w,),
+                                  errorWidget: (BuildContext context, String url, error) =>
                                       SvgImage(
                                           name: 'assets/svgs/profile.svg',
                                           height: 150.h,
-                                          width: 150.w),
+                                          width: 150.w,),
                                 ),
                               ),
                             ),
                             Positioned(
                                 right: 10.w,
                                 bottom: 10,
-                                child: const Icon(Icons.camera_enhance)),
+                                child: const Icon(Icons.camera_enhance),),
                           ],
                         ),
                       ),
@@ -156,7 +155,7 @@ class _ProfileFormState extends State<ProfileForm> {
                       height: 20.h,
                     ),
                     CustomFormField(
-                        validator: (value) {
+                        validator: (String? value) {
                           if (value!.contains(' ')) {
                             return null;
                           } else {
@@ -167,13 +166,13 @@ class _ProfileFormState extends State<ProfileForm> {
                         keyboardType: TextInputType.name,
                         inputAction: TextInputAction.done,
                         label: '',
-                        hint: 'full Name'),
+                        hint: 'full Name',),
                     CustomFormField(
                         controller: nickNameController,
                         keyboardType: TextInputType.name,
                         inputAction: TextInputAction.done,
                         label: '',
-                        hint: 'Nickname'),
+                        hint: 'Nickname',),
                     CustomFormField(
                         readOnly: true,
                         controller: birthdayController,
@@ -182,7 +181,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         label: '',
                         sufIcon: InkWell(
                             onTap: () async {
-                              DateTime? newDate = await showDatePicker(
+                              final DateTime? newDate = await showDatePicker(
                                 context: context,
                                 initialDate: brithdayPick,
                                 firstDate: DateTime(1900),
@@ -193,13 +192,13 @@ class _ProfileFormState extends State<ProfileForm> {
                                       primaryColor: Colors.black,
                                       buttonTheme: const ButtonThemeData(
                                           buttonColor: Colors.black,
-                                          textTheme: ButtonTextTheme.primary),
+                                          textTheme: ButtonTextTheme.primary,),
                                       colorScheme: ColorScheme.light(
                                               primary: Colors.black,
-                                              background: color.backgroundColor)
+                                              background: color.backgroundColor,)
                                           .copyWith(
                                               secondary:
-                                                  const Color(0xFF8CE7F1)),
+                                                  const Color(0xFF8CE7F1),),
                                     ),
                                     child: child!,
                                   );
@@ -210,35 +209,35 @@ class _ProfileFormState extends State<ProfileForm> {
                                 brithdayPick = newDate;
                               });
                             },
-                            child: const Icon(Icons.calendar_month_rounded)),
-                        hint: formattedBirthDate),
+                            child: const Icon(Icons.calendar_month_rounded),),
+                        hint: formattedBirthDate,),
                     CustomFormField(
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         inputAction: TextInputAction.done,
                         label: '',
                         sufIcon: const Icon(Icons.email_rounded),
-                        hint: 'Email'),
+                        hint: 'Email',),
                     InternationalPhoneNumberInput(
                       initialValue: number,
                       textStyle: GoogleFonts.sourceSansPro(
                           color: color.primaryColor,
                           fontSize: 14.sp,
                           height: 22 / 14,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w600,),
                       selectorTextStyle: GoogleFonts.sourceSansPro(
                           color: color.primaryColor,
                           fontSize: 14.sp,
                           height: 22 / 14,
-                          fontWeight: FontWeight.w600),
+                          fontWeight: FontWeight.w600,),
                       //cursorColor: Colors.transparent,
                       selectorButtonOnErrorPadding: 10,
                       selectorConfig: const SelectorConfig(
                           setSelectorButtonAsPrefixIcon: true,
                           trailingSpace: false,
                           leadingPadding: 10,
-                          selectorType: PhoneInputSelectorType.DROPDOWN),
-                      onInputChanged: (num) {
+                          selectorType: PhoneInputSelectorType.DROPDOWN,),
+                      onInputChanged: (PhoneNumber num) {
                         //  dialCode = num.dialCode.toString();
                       },
                       textFieldController: userPhoneController,
@@ -248,7 +247,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             color: color.primaryColor,
                             fontSize: 14.sp,
                             height: 22 / 14,
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w600,),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
                           borderSide: BorderSide(
@@ -284,23 +283,23 @@ class _ProfileFormState extends State<ProfileForm> {
                                       borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(16),
                                     topLeft: Radius.circular(16),
-                                  )),
+                                  ),),
                                   builder: (BuildContext context) =>
                                       DynamicSelector(
                                           header: 'Choose Your Gender',
-                                          list: const [
-                                            "Male",
-                                            "Female",
-                                            "Others"
-                                          ])).then((value) {
+                                          list:  const <String>[
+                                            'Male',
+                                            'Female',
+                                            'Others'
+                                          ],),).then(( dynamic value) {
                                 // print(value);
                                 setState(() {
                                   genderControlller.text = value.toString();
                                 });
                               });
                             },
-                            child: const Icon(Icons.arrow_drop_down)),
-                        hint: 'gender'),
+                            child: const Icon(Icons.arrow_drop_down),),
+                        hint: 'gender',),
                     SizedBox(
                       height: 30.h,
                     ),
@@ -316,13 +315,13 @@ class _ProfileFormState extends State<ProfileForm> {
                               color.primaryColor.withOpacity(.5),
                             ],
                             strokeWidth: 4,
-                            pathBackgroundColor: color.primaryColor),
+                            pathBackgroundColor: color.primaryColor,),
                       ),
                     if (!loading)
                       InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            UserDetail userDetail = UserDetail(
+                            final UserDetail userDetail = UserDetail(
                               email: emailController.text,
                               fName: fullNameController.text,
                               nickname: nickNameController.text,
@@ -333,10 +332,10 @@ class _ProfileFormState extends State<ProfileForm> {
                             );
                             print(userDetail);
                             formrepository.editUserInfo(userDetail);
-                            cToast(msg: "Profile Updated", context: context);
+                            cToast(msg: 'Profile Updated', context: context);
 
                             changeScreenReplacement(
-                                context, const Finngerprint());
+                                context, const Finngerprint(),);
                           } else {
                             cToast(msg: 'Error', context: context);
                           }
@@ -346,13 +345,13 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: Button(
                             title: 'Continue',
                             color: color.primaryColor,
-                            textcolor: color.backgroundColor),
+                            textcolor: color.backgroundColor,),
                       )
                   ],
-                ))
-          ]),
+                ),)
+          ],),
         ),
-      )),
+      ),),
     );
   }
 }

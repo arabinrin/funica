@@ -9,8 +9,8 @@ class Welcome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
         body: InkWell(
@@ -35,7 +35,7 @@ class Welcome extends StatelessWidget {
                 width: width * .9,
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                   
                     children: [
                       Text(
                         'Welcome to',
@@ -44,7 +44,7 @@ class Welcome extends StatelessWidget {
                           fontSize: 30,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
-                        )),
+                        ),),
                       ),
                       SizedBox(
                         height: 10.h,
@@ -56,7 +56,7 @@ class Welcome extends StatelessWidget {
                           fontSize: 50,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
-                        )),
+                        ),),
                       ),
                       const SizedBox(
                         height: 10,
@@ -68,17 +68,17 @@ class Welcome extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                           color: Colors.white,
-                        )),
+                        ),),
                         
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       )
-                    ]),
+                    ],),
               )
             ],
           ),
         ),
       ),
-    ));
+    ),);
   }
 }

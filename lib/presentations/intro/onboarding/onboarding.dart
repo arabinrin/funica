@@ -7,8 +7,8 @@ import 'package:funica/utils/text_resourses/app_textstyle.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class B1 extends StatelessWidget {
-  static const route = '/B1';
-  B1({Key? key}) : super(key: key);
+  const B1({super.key});
+  static const String route = '/B1';
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +17,10 @@ class B1 extends StatelessWidget {
       current: 0,
       tap: () {
         Navigator.of(context).push(
-          PageRouteBuilder(
-              opaque: true,
+          PageRouteBuilder<dynamic>(
               transitionDuration: const Duration(milliseconds: 900),
               pageBuilder: (BuildContext context, _, __) {
-                return B2();
+                return const B2();
               },
               transitionsBuilder:
                   (_, Animation<double> animation, __, Widget child) {
@@ -29,7 +28,7 @@ class B1 extends StatelessWidget {
                   opacity: animation,
                   child: child,
                 );
-              }),
+              },),
         );
       },
     );
@@ -37,8 +36,8 @@ class B1 extends StatelessWidget {
 }
 
 class B2 extends StatelessWidget {
-  static const route = '/B2';
-  B2({Key? key}) : super(key: key);
+  const B2({super.key});
+  static const String route = '/B2';
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +46,10 @@ class B2 extends StatelessWidget {
       current: 1,
       tap: () {
         Navigator.of(context).push(
-          PageRouteBuilder(
-              opaque: true,
+          PageRouteBuilder<dynamic>(
               transitionDuration: const Duration(milliseconds: 900),
               pageBuilder: (BuildContext context, _, __) {
-                return B3();
+                return const B3();
               },
               transitionsBuilder:
                   (_, Animation<double> animation, __, Widget child) {
@@ -59,7 +57,7 @@ class B2 extends StatelessWidget {
                   opacity: animation,
                   child: child,
                 );
-              }),
+              },),
         );
       },
     );
@@ -67,8 +65,8 @@ class B2 extends StatelessWidget {
 }
 
 class B3 extends StatelessWidget {
-  static const route = '/B2';
-  B3({Key? key}) : super(key: key);
+  const B3({super.key});
+  static const String route = '/B2';
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +75,7 @@ class B3 extends StatelessWidget {
       current: 2,
       tap: () {
         Navigator.of(context).push(
-          PageRouteBuilder(
-              opaque: true,
+          PageRouteBuilder<dynamic>(
               transitionDuration: const Duration(milliseconds: 900),
               pageBuilder: (BuildContext context, _, __) {
                 return const AuthScreen();
@@ -89,7 +86,7 @@ class B3 extends StatelessWidget {
                   opacity: animation,
                   child: child,
                 );
-              }),
+              },),
         );
       },
     );
@@ -98,11 +95,11 @@ class B3 extends StatelessWidget {
 
 class TheBoard extends StatelessWidget {
   const TheBoard({
-    Key? key,
+    super.key,
     this.onBoardModel,
     this.tap,
     this.current,
-  }) : super(key: key);
+  });
 
   final VoidCallback? tap;
   final int? current;
@@ -110,9 +107,9 @@ class TheBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final ThemeData color = Theme.of(context);
 
     return Scaffold(
       backgroundColor: color.backgroundColor,
@@ -122,9 +119,8 @@ class TheBoard extends StatelessWidget {
         height: height,
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children:<Widget> [
               const SizedBox(
                 height: 50,
               ),
@@ -134,7 +130,7 @@ class TheBoard extends StatelessWidget {
                 child: SvgImage(
                     name: onBoardModel!.image,
                     height: height * .55,
-                    width: width),
+                    width: width,),
               ),
               SizedBox(
                 height: height * .25,
@@ -153,19 +149,20 @@ class TheBoard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:
-                      List.generate(3, (index) => buildDot(index, context)),
+                      List.generate(3, (int index) => buildDot(index, context)),
                 ),
               ),
               const SizedBox(
                 height: 40,
               ),
               GestureDetector(
-                  onTap: tap,
-                  child: Button(
-                    color: color.primaryColor,
-                    textcolor: color.backgroundColor,
-                    title: 'Next',
-                  )),
+                onTap: tap,
+                child: Button(
+                  color: color.primaryColor,
+                  textcolor: color.backgroundColor,
+                  title: 'Next',
+                ),
+              ),
             ],
           ),
         ),
@@ -174,15 +171,16 @@ class TheBoard extends StatelessWidget {
   }
 
   Container buildDot(int index, BuildContext context) {
-        final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
     return Container(
-      margin: EdgeInsets.only(right: 5),
+      margin: const EdgeInsets.only(right: 5),
       height: 7,
       width: current == index ? 25 : 7,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: current == index ? color.primaryColor : Colors.grey.withOpacity(.5),
+        color:
+            current == index ? color.primaryColor : Colors.grey.withOpacity(.5),
       ),
     );
   }

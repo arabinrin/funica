@@ -6,49 +6,33 @@ class DatabaseMethods {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .set(userData)
-        .catchError((e) {});
+        .set(userData);
   }
 
-  getUserdataById(String? _uid) async {
-    DocumentSnapshot userDoc =
+  Future<dynamic> getUserdataById(String? _uid) async {
+    final DocumentSnapshot<dynamic> userDoc =
         await FirebaseFirestore.instance.collection('users').doc(_uid).get();
     final userDate = userDoc.data() as dynamic;
 
     return userDate;
   }
 
-  getUserInfo(String email) async {
+  Future<Future<QuerySnapshot<Map<String, dynamic>>>> getUserInfo(
+      String email) async {
     return FirebaseFirestore.instance
         .collection('users')
         .where('userEmail', isEqualTo: email)
-        .get()
-        .catchError((e) {
-      print(e.toString());
-    });
-  }
-
-  getUserInfoByName(String? name) async {
-    return await FirebaseFirestore.instance
-        .collection("users")
-        .where("userName", isEqualTo: name)
-        .get()
-        .catchError((e) {
-      print(e.toString());
-    });
-    // final userDate = userDoc as dynamic;
-  }
-
-  searchByName(String searchField) {
-    return FirebaseFirestore.instance
-        .collection("users")
-        // .where('userId', isNotEqualTo: 'FirebaseAuth.instance.currentUser!.uid')
-        .where('userName', isEqualTo: searchField)
         .get();
   }
 
-  users() {
-    return FirebaseFirestore.instance.collection("users").get();
+  Future<QuerySnapshot<Map<String, dynamic>>> getUserInfoByName(
+      String? name) async {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .where('userName', isEqualTo: name)
+        .get();
+
+    // final userDate = userDoc as dynamic;
   }
 
   dynamicUsers() {
@@ -56,19 +40,18 @@ class DatabaseMethods {
         .collection('users')
         .where('userId', isNotEqualTo: 'FirebaseAuth.instance.currentUser!.uid')
         .get()
-        .then((value) {});
+        .then((QuerySnapshot<Map<String, dynamic>> value) {});
   }
 
   Future<bool>? addProduct(Map<String, dynamic> chatRoom, String productID) {
     FirebaseFirestore.instance
-        .collection("prodcuts")
+        .collection('prodcuts')
         .doc(productID)
-        .set(chatRoom)
-        .catchError((e) {
-      print(e);
-    });
+        .set(chatRoom);
     return null;
   }
 
-
+  Future<QuerySnapshot<Map<String, dynamic>>> users() {
+    return FirebaseFirestore.instance.collection('users').get();
+  }
 }

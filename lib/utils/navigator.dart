@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 void changeScreen(BuildContext context, Widget widget) {
   Navigator.push(
      context,
-     PageRouteBuilder(
+     PageRouteBuilder<dynamic>(
       transitionDuration: const Duration(milliseconds: 200),
       reverseTransitionDuration: const Duration(milliseconds: 200),
-      pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => FadeTransition(
         opacity: animation,
         child: widget,
       ),
@@ -17,10 +17,10 @@ void changeScreen(BuildContext context, Widget widget) {
 void changeScreenReplacement(BuildContext context, Widget widget) {
   Navigator.pushReplacement(
     context,
-    PageRouteBuilder(
+    PageRouteBuilder<dynamic>(
       transitionDuration: const Duration(milliseconds: 200),
       reverseTransitionDuration: const Duration(milliseconds: 200),
-      pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => FadeTransition(
         opacity: animation,
         child: widget,
       ),
@@ -31,14 +31,14 @@ void changeScreenReplacement(BuildContext context, Widget widget) {
 void changeScreenPushUntil(BuildContext context, Widget widget) {
   Navigator.pushAndRemoveUntil(
     context,
-    PageRouteBuilder(
+    PageRouteBuilder<dynamic>(
       transitionDuration: const Duration(milliseconds: 200),
       reverseTransitionDuration: const Duration(milliseconds: 200),
-      pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) => FadeTransition(
         opacity: animation,
         child: widget,
       ),
     ),
-    (route) => false,
+    (Route<dynamic> route) => false,
   );
 }
