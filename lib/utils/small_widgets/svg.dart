@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class SvgImage extends StatelessWidget {
   const SvgImage({
-    Key? key,
+    super.key,
     required this.name,
     required this.height,
     required this.width,
-  }) : super(key: key);
+  });
 
   final String? name;
   final double height;

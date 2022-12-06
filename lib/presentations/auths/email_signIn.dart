@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:funica/presentations/auths/login.dart';
-import 'package:funica/presentations/registration/profile_form.dart';
 import 'package:funica/repository/auth_repository.dart';
 import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/arrow.dart';

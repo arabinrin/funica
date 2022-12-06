@@ -4,10 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Heading extends StatelessWidget {
   const Heading({
-    Key? key,
+    super.key,
     this.category,
     this.option,
-  }) : super(key: key);
+  });
   final String? category;
   final String? option;
 
@@ -15,7 +15,7 @@ class Heading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      children: <Widget>[
         Text(
           category!,
           style: GoogleFonts.poppins(

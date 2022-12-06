@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:funica/presentations/home/home_page.dart';
+import 'package:funica/presentations/product_manager/add_products.dart';
 
 class PageViewScreen extends StatefulWidget {
   const PageViewScreen({
@@ -12,7 +13,7 @@ class PageViewScreen extends StatefulWidget {
 
 class _PageViewScreenState extends State<PageViewScreen>
     with WidgetsBindingObserver {
-  var _selectedPageIndex;
+  int? _selectedPageIndex;
   late List<Widget> _pages;
   late PageController _pageController;
 
@@ -24,10 +25,10 @@ class _PageViewScreenState extends State<PageViewScreen>
       HomePage(),
       HomePage(),
       HomePage(),
-      HomePage(),
+      ProductForm(),
       HomePage(),
     ];
-    _pageController = PageController(initialPage: _selectedPageIndex);
+    _pageController = PageController(initialPage: _selectedPageIndex!);
   }
 
   @override
@@ -35,12 +36,12 @@ class _PageViewScreenState extends State<PageViewScreen>
     //  final height = MediaQuery.of(context).size.height;
     // final width = MediaQuery.of(context).size.width;
     final color = Theme.of(context);
-    DateTime pre_backpress = DateTime.now();
+    DateTime preBackpress = DateTime.now();
     return WillPopScope(
       onWillPop: () async {
-        final timegap = DateTime.now().difference(pre_backpress);
+        final timegap = DateTime.now().difference(preBackpress);
         final cantExit = timegap >=const  Duration(seconds: 2);
-        pre_backpress = DateTime.now();
+        preBackpress = DateTime.now();
         if (_selectedPageIndex == 0) {
           if (cantExit) {
             Fluttertoast.showToast(
@@ -58,7 +59,7 @@ class _PageViewScreenState extends State<PageViewScreen>
         } else {
           setState(() {
             _selectedPageIndex = 0;
-            _pageController.jumpToPage(_selectedPageIndex);
+            _pageController.jumpToPage(_selectedPageIndex!);
           });
           return false;
         }
@@ -118,7 +119,7 @@ class _PageViewScreenState extends State<PageViewScreen>
             type: BottomNavigationBarType.fixed,
             // showSelectedLabels: true,
             // showUnselectedLabels: false,
-            currentIndex: _selectedPageIndex,
+            currentIndex: _selectedPageIndex!,
             onTap: (selectedPageIndex) {
               setState(() {
                 _selectedPageIndex = selectedPageIndex;

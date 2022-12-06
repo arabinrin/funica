@@ -20,9 +20,9 @@ class PinScreen extends StatefulWidget {
 class _PinScreenState extends State<PinScreen> {
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final ThemeData color = Theme.of(context);
     return SafeArea(
         child: Scaffold(
       body: Container(
@@ -40,7 +40,7 @@ class _PinScreenState extends State<PinScreen> {
                   Text(
                     'Create New PIN',
                     style: GoogleFonts.poppins(
-                        textStyle: bodyNormalBoldText(context)),
+                        textStyle: bodyNormalBoldText(context),),
                   )
                 ],
               ),
@@ -65,10 +65,10 @@ class _PinScreenState extends State<PinScreen> {
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: 65.w,
                   style: GoogleFonts.dmSans(
-                      textStyle: bodyNormalBoldText(context)),
+                      textStyle: bodyNormalBoldText(context),),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.box,
-                  onCompleted: (pin) {},
+                  onCompleted: (String pin) {},
                 ),
               ),
               SizedBox(
@@ -81,11 +81,11 @@ class _PinScreenState extends State<PinScreen> {
                   child: Button(
                       title: ' Continue ',
                       color: color.primaryColor,
-                      textcolor: color.backgroundColor))
+                      textcolor: color.backgroundColor,),)
             ],
           ),
         ),
       ),
-    ));
+    ),);
   }
 }

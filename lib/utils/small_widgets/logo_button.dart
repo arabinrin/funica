@@ -4,17 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LogoButton extends StatelessWidget {
   const LogoButton({
-    Key? key,
+    super.key,
     required this.image,
     this.tap,
-  }) : super(key: key);
+  });
 
   final String image;
   final void Function()? tap;
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
     return InkWell(
       onTap: tap,

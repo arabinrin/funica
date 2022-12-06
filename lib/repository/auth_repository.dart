@@ -10,7 +10,6 @@ import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/dialog.dart';
 import 'package:funica/utils/small_widgets/snackbar.dart';
 import 'package:funica/utils/text_resourses/app_textstyle.dart';
-import 'package:provider/provider.dart';
 import 'package:simple_connection_checker/simple_connection_checker.dart';
 
 class AuthRepository {
@@ -24,22 +23,22 @@ class AuthRepository {
     // String lName,
     // String phoneNumber,
   ) async {
-    bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
-    final storage = Storage();
+    final bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
+    final Storage storage = Storage();
 
     try {
       if (isConnected == true) {
-        UserCredential userCredential = await FirebaseAuth.instance
+        final UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
                 email: userSignUpEmail, password: userSignUpPassword);
-        userCredential.user!.updateDisplayName(username);
+        await userCredential.user!.updateDisplayName(username);
         await userCredential.user!.sendEmailVerification().then((value) async {
           await storage.setIsUserLoggedIn(true);
           await storage.setProfileData(userSignUpEmail, username);
 
           changeScreenPushUntil(context, const ProfileForm());
-          cToast(msg: "Yay! Signed up Successfully 🤩", context: context);
-          FirebaseAnalytics.instance
+          cToast(msg: 'Yay! Signed up Successfully 🤩', context: context);
+          await FirebaseAnalytics.instance
               .logEvent(name: 'User just signed up', parameters: {
             'uid': FirebaseAuth.instance.currentUser!.uid,
           });
@@ -47,8 +46,8 @@ class AuthRepository {
       } else {
         showSuccessDialog(
             context: context,
-            header: "No network connection 😞",
-            body: "Retry",
+            header: 'No network connection 😞',
+            body: 'Retry',
             path: 'oops.json');
         //  cToast(
         //   msg: "Oops! No network connection 😞",
@@ -56,31 +55,31 @@ class AuthRepository {
         //   context: context);
       }
     } catch (e) {
-      cToast(msg: "Oops! An error occured.. 😞 \n $e", context: context);
+      cToast(msg: 'Oops! An error occured.. 😞 \n $e', context: context);
     }
   }
 
   //Sign In
   Future<void> signInWithEmail(
       String email, String password, BuildContext context) async {
-    bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
-    final storage = Storage();
+    final bool isConnected = await SimpleConnectionChecker.isConnectedToInternet();
+    final Storage storage = Storage();
     
 
     try {
       if (isConnected == true) {
-        UserCredential userCredential = await FirebaseAuth.instance
+       await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password)
-            .then((value) async {
+            .then((UserCredential value) async {
           await storage.setIsUserLoggedIn(true);
-          QuerySnapshot userSnapShots =
-              await FirebaseFirestore.instance.collection("user").get();
-          userSnapShots.docs.map((element) {
+          final QuerySnapshot userSnapShots =
+              await FirebaseFirestore.instance.collection('user').get();
+          userSnapShots.docs.map((QueryDocumentSnapshot<Object?> element) {
             if (FirebaseAuth.instance.currentUser!.uid ==
-                element.get("userId")) {
+                element.get('userId')) {
               userModel = UserModel(
-                username: element.get("useerName") ?? "",
-                email: element.get("email") ?? "",
+                username: element.get('userName').toString() ,
+                email: element.get('email').toString(),
               );
 
               storage.setProfileData(
@@ -89,29 +88,29 @@ class AuthRepository {
               );
             }
           }).toList();
-          changeScreenPushUntil(context, Finngerprint());
+          changeScreenPushUntil(context, const Finngerprint());
 
-          cToast(msg: "Yay! Signed In 🤩", context: context);
+          cToast(msg: 'Yay! Signed In 🤩', context: context);
 
           return value;
         });
       } else {
         showSuccessDialog(
             context: context,
-            header: "No network connection 😞",
-            body: "Retry",
+            header: 'No network connection 😞',
+            body: 'Retry',
             path: 'oops.json');
       }
     } catch (e) {
       print(e.toString());
       cToast(
           msg:
-              "We cannot find an account with this email and password. Please check your details 😞",
+              'We cannot find an account with this email and password. Please check your details 😞',
           context: context);
     }
   }
 
-  Future resetPassword(String email, BuildContext context) async {
+  Future<void> resetPassword(String email, BuildContext context) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
@@ -122,9 +121,9 @@ class AuthRepository {
   }
 
   void showSnackBar(BuildContext context, String? text) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
-    final snackBar = SnackBar(
+    final SnackBar snackBar = SnackBar(
       content: Text(
         text!,
         style: bodySmallText(context).copyWith(color: color.primaryColor),

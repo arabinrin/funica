@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:funica/utils/small_widgets/logo.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -9,7 +8,7 @@ class Splash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
     return Scaffold(
       body: Padding(
@@ -40,7 +39,7 @@ class Splash extends StatelessWidget {
                       fontSize: 40,
                       fontWeight: FontWeight.w600,
                       color: color.primaryColor,
-                    )),
+                    ),),
                   )
                 ],
               ),
@@ -48,15 +47,15 @@ class Splash extends StatelessWidget {
             SizedBox(
               height: 60,
               width: 60,
-              child: LoadingIndicator(
-                  indicatorType: Indicator.ballSpinFadeLoader,
-                  colors: [
-                    color.primaryColor,
-                    Colors.grey,
-                    color.primaryColor.withOpacity(.5),
-                  ],
-                  strokeWidth: 4,
-                  pathBackgroundColor: color.primaryColor),
+                child: LoadingIndicator(
+                    indicatorType: Indicator.ballSpinFadeLoader,
+                    colors: [
+                      color.primaryColor,
+                      Colors.grey,
+                      color.primaryColor.withOpacity(.5),
+                    ],
+                    strokeWidth: 4,
+                    pathBackgroundColor: color.primaryColor,),
             )
           ],
         ),

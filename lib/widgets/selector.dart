@@ -1,34 +1,29 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DynamicSelector extends StatelessWidget {
   DynamicSelector({
-    Key? key,
+    super.key,
     required this.header,
     required this.list,
     this.height,
-  }) : super(key: key);
+  });
   final String header;
   final List<String> list;
   double? height;
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
-    return Container(
+    return SizedBox(
         height: height ?? 250.h,
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 24.h, horizontal: 20.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Container(
                 width: 30.w,
                 height: 4,
@@ -41,7 +36,7 @@ class DynamicSelector extends StatelessWidget {
                 height: 8.h,
               ),
               Row(
-                children: [
+                children: <Widget>[
                   Text(
                     header,
                     textAlign: TextAlign.center,
@@ -59,35 +54,36 @@ class DynamicSelector extends StatelessWidget {
               ),
               Expanded(
                 child: ListView.separated(
-                    itemCount: list.length,
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        color:color.primaryColor,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context, list[index]);
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: Container(
-                            height: 30.h,
-                            child: Text(
-                              list[index],
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.sourceSansPro(
-                                color: color.primaryColor,
-                                fontSize: 14.sp,
-                                height: 24 / 14,
-                                fontWeight: FontWeight.w600,
-                              ),
+                  itemCount: list.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider(
+                      color: color.primaryColor,
+                    );
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context, list[index]);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: SizedBox(
+                          height: 30.h,
+                          child: Text(
+                            list[index],
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.sourceSansPro(
+                              color: color.primaryColor,
+                              fontSize: 14.sp,
+                              height: 24 / 14,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

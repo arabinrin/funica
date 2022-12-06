@@ -16,20 +16,21 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:local_auth/local_auth.dart';
 
 class Finngerprint extends StatefulWidget {
-  const Finngerprint({Key? key}) : super(key: key);
+  const Finngerprint({super.key});
 
   @override
   State<Finngerprint> createState() => _FinngerprintState();
 }
 
 class _FinngerprintState extends State<Finngerprint> {
+  bool loading = false;
   DarkThemeProvider themeChangeProvider = DarkThemeProvider();
-  final storage = Storage();
+  final Storage storage = Storage();
   @override
   void initState() {
     getCurrentAppMode();
     _checkBiometric();
-    _getAvailableBiometric();
+    // _getAvailableBiometric();
 
     super.initState();
   }
@@ -42,7 +43,7 @@ class _FinngerprintState extends State<Finngerprint> {
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
   bool isAuthenticated = false;
-  final storedPasscode = '1234';
+  final String storedPasscode = '1234';
 
   @override
   void dispose() {
@@ -51,40 +52,40 @@ class _FinngerprintState extends State<Finngerprint> {
   }
 
   LocalAuthentication auth = LocalAuthentication();
-  bool _canCheckBiometric = true;
-  List<BiometricType> _availableBiometric = [];
-  String authorized = "Not authorized";
+  // bool _canCheckBiometric = true;
+  // List<BiometricType> _availableBiometric = [];
+  String authorized = 'Not authorized';
 
   Future<void> _checkBiometric() async {
-    late bool canCheckBiometric;
+    // late bool canCheckBiometric;
     try {
-      canCheckBiometric = await auth.canCheckBiometrics;
+      // canCheckBiometric = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
       cToast(msg: e.toString(), context: context);
     }
     if (!mounted) return;
     setState(() {
-      _canCheckBiometric = canCheckBiometric;
+      // _canCheckBiometric = canCheckBiometric;
     });
   }
 
-  Future<void> _getAvailableBiometric() async {
-    late List<BiometricType> availableBiometric;
-    try {
-      availableBiometric = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      print(e);
-    }
-    setState(() {
-      _availableBiometric = availableBiometric;
-    });
-  }
+  // Future<void> _getAvailableBiometric() async {
+  //   late List<BiometricType> availableBiometric;
+  //   try {
+  //     availableBiometric = await auth.getAvailableBiometrics();
+  //   } on PlatformException catch (e) {
+  //     print(e);
+  //   }
+  //   setState(() {
+  //     // _availableBiometric = availableBiometric;
+  //   });
+  // }
 
   Future<void> _authenticate() async {
     bool authenticated = false;
     try {
       authenticated = await auth.authenticate(
-        localizedReason: "Scan your finger to authenticate",
+        localizedReason: 'Scan your finger to authenticate',
         // useErrorDialogs: true,
         // stickyAuth: false,
       );
@@ -93,7 +94,7 @@ class _FinngerprintState extends State<Finngerprint> {
     }
     if (!mounted) return;
     setState(() {
-      authorized = authenticated ? "Authorized" : " to authenticate";
+      authorized = authenticated ? 'Authorized' : ' to authenticate';
       print(authorized);
 
       if (authenticated) {
@@ -102,111 +103,142 @@ class _FinngerprintState extends State<Finngerprint> {
         // Future.delayed(Duration(milliseconds: 100), () {
         //   showDialog(context: context, builder: (context) => EmotionsForm());
         // });
-        showDialog(context: context, builder: (context) => EmotionsForm())
-            .then((value) {
+        if (storage.box.read('first_timer') == false ||
+            storage.box.read('first_timer') == null) {
+          showDialog(context: context, builder: (BuildContext context) => EmotionsForm())
+              .then(( dynamic value) {
+           
+            changeScreenReplacement(context, const PageViewScreen());
+          });
+          storage.box.write('first_timer', true);
+        } else {
+          setState(() {
+            loading = true;
+          });
           changeScreenReplacement(context, const PageViewScreen());
-        });
+        }
       }
+      ;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final ThemeData color = Theme.of(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: color.backgroundColor,
-        body: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 20.h,
-            vertical: 20,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Set Your Fingerprint',
-                      style: GoogleFonts.poppins(
-                          textStyle: bodyNormalBoldText(context)),
-                    )
-                  ],
+        body: loading
+            ? Center(
+              child: SizedBox(
+                  height: 60,
+                  width: 60,
+                  child: LoadingIndicator(
+                      indicatorType: Indicator.ballSpinFadeLoader,
+                      colors: [
+                        color.primaryColor,
+                        Colors.grey,
+                        color.primaryColor.withOpacity(.5),
+                      ],
+                      strokeWidth: 4,
+                      pathBackgroundColor: color.primaryColor,),
                 ),
-                SizedBox(
-                  height: 100.h,
-                ),
-                Text(
-                  'Add a PIN to make your account more secure',
-                  style:
-                      GoogleFonts.poppins(textStyle: bodyNormalText(context)),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-                SizedBox(
-                  height: 250.h,
-                  width: 200.w,
-                  child: SvgImage(
-                      name: isDark
-                          ? 'assets/svgs/ingerwhaite.svg'
-                          : 'assets/svgs/fingerdark.svg',
-                      height: height,
-                      width: width),
-                ),
-                Text(
-                  'Please put your finger on the fingerprint scanner to get started',
-                  style:
-                      GoogleFonts.poppins(textStyle: bodyNormalText(context)),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 50.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: width / 2.5,
-                      child: InkWell(
-                        onTap: () {
-                          bool isBio =
-                              storage.box.read('bioDataStatus') ?? false;
-                          if (!isBio) {
-                            changeScreenReplacement(context, const PageViewScreen());
-                          } else {
-                            cToast(
-                                msg: 'Please use the CONTINUE button',
-                                context: context);
-                          }
-                        },
-                        child: Button(
-                            title: 'Skip',
-                            color: color.hoverColor,
-                            textcolor: color.primaryColor),
-                      ),
+            )
+            : Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.h,
+                    vertical: 20,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Set Your Fingerprint',
+                              style: GoogleFonts.poppins(
+                                  textStyle: bodyNormalBoldText(context),),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 100.h,
+                        ),
+                        Text(
+                          'Add a PIN to make your account more secure',
+                          style: GoogleFonts.poppins(
+                              textStyle: bodyNormalText(context),),
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 50.h,
+                        ),
+                        SizedBox(
+                          height: 250.h,
+                          width: 200.w,
+                          child: SvgImage(
+                              name: isDark
+                                  ? 'assets/svgs/ingerwhaite.svg'
+                                  : 'assets/svgs/fingerdark.svg',
+                              height: height,
+                              width: width,),
+                        ),
+                        Text(
+                          'Please put your finger on the fingerprint scanner to get started',
+                          style: GoogleFonts.poppins(
+                              textStyle: bodyNormalText(context),),
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                          height: 50.h,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: width / 2.5,
+                              child: InkWell(
+                                onTap: () {
+                                  bool isBio =
+                                      storage.box.read('bioDataStatus') ??
+                                          false;
+                                  if (!isBio) {
+                                    changeScreenReplacement(
+                                        context, const PageViewScreen(),);
+                                  } else {
+                                    cToast(
+                                        msg: 'Please use the CONTINUE button',
+                                        context: context,);
+                                  }
+                                },
+                                child: Button(
+                                    title: 'Skip',
+                                    color: color.hoverColor,
+                                    textcolor: color.primaryColor,),
+                              ),
+                            ),
+                            SizedBox(
+                              width: width / 2.5,
+                              child: InkWell(
+                                onTap: _authenticate,
+                                child: Button(
+                                    title: 'Continue',
+                                    color: color.primaryColor,
+                                    textcolor: color.backgroundColor,),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                    SizedBox(
-                      width: width / 2.5,
-                      child: InkWell(
-                        onTap: _authenticate,
-                        child: Button(
-                            title: 'Continue',
-                            color: color.primaryColor,
-                            textcolor: color.backgroundColor),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -214,8 +246,8 @@ class _FinngerprintState extends State<Finngerprint> {
 
 class EmotionsForm extends StatefulWidget {
   EmotionsForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<EmotionsForm> createState() => _EmotionsFormState();
@@ -239,9 +271,8 @@ class _EmotionsFormState extends State<EmotionsForm> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    final color = Theme.of(context);
+    final double height = MediaQuery.of(context).size.height;
+    final ThemeData color = Theme.of(context);
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -265,7 +296,7 @@ class _EmotionsFormState extends State<EmotionsForm> {
                         ? 'assets/svgs/doneblack.svg'
                         : 'assets/svgs/donewhite.svg',
                     height: 250.h,
-                    width: 250.w),
+                    width: 250.w,),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -298,7 +329,7 @@ class _EmotionsFormState extends State<EmotionsForm> {
                         color.primaryColor.withOpacity(.5),
                       ],
                       strokeWidth: 4,
-                      pathBackgroundColor: color.primaryColor),
+                      pathBackgroundColor: color.primaryColor,),
                 )
               ],
             ),

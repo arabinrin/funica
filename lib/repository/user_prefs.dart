@@ -1,40 +1,42 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
   GetStorage box = GetStorage();
-  static const _keyUser = 'username';
-  static const _keyEmail = 'email';
-  static const _keyPassword = 'pwd';
-  static const _keyPhoneNum = 'pwd';
+  static const String _keyUser = 'username';
+  static const String _keyEmail = 'email';
+  static const String _keyPassword = 'pwd';
+  static const String _keyPhoneNum = 'pwd';
 
+  // ignore: constant_identifier_names
   static const String PREFS_KEY_IS_USER_LOGGED_IN =
-      "PREFS_KEY_IS_USER_LOGGED_IN";
+      'PREFS_KEY_IS_USER_LOGGED_IN';
+  // ignore: constant_identifier_names
   static const String PREFS_KEY_IS_USER_BIOACTIVE =
-      "PREFS_KEY_IS_USER_BIOACTIVE";
+      'PREFS_KEY_IS_USER_BIOACTIVE';
 
-  static const _keyCredential = 'cred';
-  static const _keyAdNum = 'adNum';
+  static const String _keyCredential = 'cred';
+  static const String _keyAdNum = 'adNum';
 
-  setData(String key, dynamic value) => box.write(key, value);
+  bool setData(String key, dynamic value) {
+    box.write(key, value);
+    return true;
+  }
 
-  Future setProfileData(String username, String email) async {
+  Future<dynamic> setProfileData(String username, String email) async {
     await box.write(_keyUser, username);
     await box.write(_keyEmail, email);
   }
 
-  Future setAdsNum(String num) async {
+  Future<dynamic> setAdsNum(String num) async {
     await box.write(_keyAdNum, num);
   }
 
   Future<void> setIsUserLoggedIn(bool isUserLoggedIn) async {
-    await setData(PREFS_KEY_IS_USER_LOGGED_IN, isUserLoggedIn);
+     setData(PREFS_KEY_IS_USER_LOGGED_IN, isUserLoggedIn);
   }
 
-  Future<void>  setFinger(bool isbioActive)async {
+  Future<void> setFinger(bool isbioActive) async {
     setData(PREFS_KEY_IS_USER_BIOACTIVE, isUserLoggedIn);
   }
 

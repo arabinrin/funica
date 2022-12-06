@@ -3,15 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ArrowBack extends StatelessWidget {
   const ArrowBack({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context);
+    final ThemeData color = Theme.of(context);
 
     return Row(
-      children: [
+      children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(vertical: 0.h),
           child: Row(

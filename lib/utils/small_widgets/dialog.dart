@@ -5,20 +5,20 @@ void showSuccessDialog(
     {required BuildContext context,
     required String header,
     required String body,
-    required String path}) {
+    required String path,}) {
   showDialog<bool>(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
-      final color = Theme.of(context);
+      final ThemeData color = Theme.of(context);
 
       return AlertDialog(
         backgroundColor: color.backgroundColor,
         content: SingleChildScrollView(
           child: Stack(
-            children: [
+            children:<Widget> [
               Column(
-                children: [
+                children:<Widget> [
                  
                   Text(
                     header,
@@ -29,11 +29,11 @@ void showSuccessDialog(
                  const  SizedBox(height: 20,),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(vertical: 5),
+                    padding: const EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
                         color: color.hintColor,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: FlatButton(
+                        borderRadius: BorderRadius.circular(10),),
+                    child: TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -52,12 +52,12 @@ void showSuccessDialog(
                     onPressed: () {
                       Navigator.of(context).pop(true);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.clear,
                       color: Colors.black,
                       size: 30,
                     ),
-                  ))
+                  ),)
             ],
           ),
         ),

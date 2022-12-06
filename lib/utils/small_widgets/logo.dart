@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Logo extends StatelessWidget {
-  Logo({
-    Key? key,
+  const Logo({
+    super.key,
     required this.back,
     required this.line,
-  }) : super(key: key);
+  });
 
-  Color? back;
-  Color? line;
+ final Color? back;
+ final  Color? line;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class Logo extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children:<Widget> [
             Logoline(
               length: 50,
               color: line,
@@ -30,7 +30,7 @@ class Logo extends StatelessWidget {
               width: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children:<Widget> [
                   Logoline(
                     length: 25,
                     color: line,
@@ -52,8 +52,7 @@ class Logo extends StatelessWidget {
 }
 
 class Logoline extends StatelessWidget {
-  const Logoline({Key? key, required this.color, required this.length})
-      : super(key: key);
+  const Logoline({super.key, required this.color, required this.length});
   final double length;
   final Color? color;
 
@@ -66,7 +65,7 @@ class Logoline extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(50), topRight: Radius.circular(50)),
+            bottomLeft: Radius.circular(50), topRight: Radius.circular(50),),
       ),
     );
   }

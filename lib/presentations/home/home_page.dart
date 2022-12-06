@@ -5,6 +5,8 @@ import 'package:funica/presentations/home/category_grid.dart';
 import 'package:funica/presentations/home/popular_products.dart';
 
 import 'package:funica/presentations/home/special_offer.dart';
+import 'package:funica/presentations/services/notification.dart';
+import 'package:funica/utils/navigator.dart';
 import 'package:funica/utils/small_widgets/heading.dart';
 import 'package:funica/widgets/custom_textfield.dart';
 import 'package:provider/provider.dart';
@@ -95,10 +97,15 @@ class HomePage extends StatelessWidget {
                           child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Icon(
-                            Icons.notifications_outlined,
-                            size: 25.r,
-                            color: color.highlightColor,
+                          GestureDetector(
+                            onTap: () {
+                              changeScreen(context, const NoficationPage());
+                            },
+                            child: Icon(
+                              Icons.notifications_outlined,
+                              size: 25.r,
+                              color: color.highlightColor,
+                            ),
                           ),
                           SizedBox(
                             width: 20.w,
@@ -124,7 +131,7 @@ class HomePage extends StatelessWidget {
                       keyboardType: TextInputType.name,
                       inputAction: TextInputAction.search,
                       label: '',
-                      hint: "Search",
+                      hint: 'Search',
                     ),
                   ),
                   Padding(
@@ -139,11 +146,11 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: const SpecialOffer(),
+                    child: SpecialOffer(),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: const CategoryGrid(),
+                    child: CategoryGrid(),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
