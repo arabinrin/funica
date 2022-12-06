@@ -47,15 +47,15 @@ class Splash extends StatelessWidget {
             SizedBox(
               height: 60,
               width: 60,
-              child: LoadingIndicator(
-                  indicatorType: Indicator.ballSpinFadeLoader,
-                  colors: [
-                    color.primaryColor,
-                    Colors.grey,
-                    color.primaryColor.withOpacity(.5),
-                  ],
-                  strokeWidth: 4,
-                  pathBackgroundColor: color.primaryColor,),
+                child: LoadingIndicator(
+                    indicatorType: Indicator.ballSpinFadeLoader,
+                    colors: [
+                      color.primaryColor,
+                      Colors.grey,
+                      color.primaryColor.withOpacity(.5),
+                    ],
+                    strokeWidth: 4,
+                    pathBackgroundColor: color.primaryColor,),
             )
           ],
         ),
